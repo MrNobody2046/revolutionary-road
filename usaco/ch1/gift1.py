@@ -14,7 +14,6 @@ persons = {}
 with open("gift1.in") as fin:
     def readline():
         return fin.readline().strip()
-    index = 0
     NP = int(readline())
     while NP != 0:
         name = readline()
