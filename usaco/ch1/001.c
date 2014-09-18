@@ -6,7 +6,7 @@ TASK: ride
 
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h> 
+#include <string.h>
 
 int char2int(char str[]){
 	int i, size, ret;
