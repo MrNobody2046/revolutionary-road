@@ -6,10 +6,11 @@ TASK: ride
 
 #include <stdio.h>
 #include <stdlib.h>
+#include<string.h> 
 
 int char2int(char str[]){
 	int i, size, ret;
-	size = sizeof(str)/sizeof(str[0]);
+	size = strlen(str);
 	ret = 1;
 	for(i=0;i<size;i++){
 		//if((65<=str[i])&&(str[i]<=90)){
@@ -21,7 +22,7 @@ int char2int(char str[]){
 	return ret;
 }
 
-char *strcpy(char *dst, char *src){
+char *mystrcpy(char *dst, char *src){
 	while(*dst++ = *src++);
 	return dst;
 }
@@ -37,10 +38,10 @@ void main(){
 	fgets(team,strsize,fin);
 	printf("Team is:%s",team);
 	if((char2int(comet) % 47)==(char2int(team) % 47)){
-		strcpy(stat,"GO\n");
+		mystrcpy(stat,"GO\n");
 	}
 	else{
-		strcpy(stat,"STAY\n");
+		mystrcpy(stat,"STAY\n");
 	};
 	printf("%s",stat);
 	fputs(stat,fout);
