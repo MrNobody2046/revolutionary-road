@@ -18,9 +18,10 @@ struct person
 };
 
 
-void readline(char buffer[],FILE *f){
+int readline(char buffer[],FILE *f){
     fgets(buffer, MAX_LINE_LENGTH, f);
     *(buffer+strlen(buffer)-1)=0;
+    return strlen(buffer);
     }
 
 
@@ -45,34 +46,30 @@ int binsearch(char *name, struct person list[],int length){
     int cond;
     int low,mid,high;
     struct person temp;
-    temp.name=name;
+    strcpy(temp.name,name);
     low = mid = 0;
     high = length;
-    printf("length:%d\n",length);
     while (low < high){
         mid = (low+high) / 2;
         cond = pcmp(temp,list[mid]);
-        printf("low:%d,mid:%d,high:%d,compare[%s] with [%s],ret:%d\n",low,mid,high,p.name,list[mid].name,cond);
         if (cond < 0)
-            high = mid -1;
+            high = mid;
         else if (cond > 0)
-            low = mid + 1;
+            low = mid;
         else
             return mid;
-    }
-    return -1
+    };
+    return -1;
 }
 
 int binsert(struct person p, struct person list[],int length){
     int cond;
     int low,mid,high;
     low = mid = 0;
-    high = length;
-    printf("length:%d\n",length);
+    high = length; //this length is valid persons in list, not the array size.
     while (low < high){
         mid = (low+high) / 2;
         cond = pcmp(p,list[mid]);
-        printf("low:%d,mid:%d,high:%d,compare[%s] with [%s],ret:%d\n",low,mid,high,p.name,list[mid].name,cond);
         if (cond < 0)
             high = mid -1;
         else if (cond > 0)
@@ -81,7 +78,7 @@ int binsert(struct person p, struct person list[],int length){
             break;
     }
     mid = (low+high) / 2;
-    printf("Insert Person'%s' into index:%d\n",p.name,mid);
+//    printf("Insert Person'%s' into index:%d\n",p.name,mid);
     if(mid<length){
         int i=length;
         for(;i>mid;i--){
@@ -89,29 +86,21 @@ int binsert(struct person p, struct person list[],int length){
         }
     }
     list[mid] = p;
-    print_persons(list,length+1);
     return mid;
-
 }
-//int insert(char *name,struct person list[],int length,int index){
-//    for(;index<length;index++){
-//        list[index+1].name = list[index].name;
-//    }
-//    list[index].name = name;
-//    print_persons(list,length);
-//    return index;
-//}
 
-int split(char line[]){
+void split(char line[],char ret[]){
     int i,l=strlen(line);
-
-    for(i=0,i<l;i++){
-        if(line[i]==" ")
+    for(i=0;i<l;i++){
+        if(line[i]==32){
+            line[i]=0;
             break;
+            }
     }
-    char ret[l-i-1];
-    for(;i<l;l--){
-        ret[l-i-1]=line[l]
+    int j;
+    for(j=0;j<l-i-1;j++){
+        ret[j]=line[i+j+1];
+        line[i+j]=0;
     }
 }
 
@@ -119,33 +108,55 @@ int main(){
 	FILE *fin, *fout;
 	int person_num,i;
 	char buffer[MAX_LINE_LENGTH];
-	char* chunk;
+	char *chunk;
 	fin = fopen("gift1.in","r");
 	fout = fopen("gift1.out","w");
 	readline(buffer,fin);
 	person_num = atoi(buffer);
-	printf("Persons:%d\n",person_num);
+	printf("PersonNum:%d\n",person_num);
 	struct person np[person_num];
+	char names[person_num][MAX_NAME_LENGTH];
 	for(i=0;i<person_num;i++){
 	    readline(buffer,fin);
 	    struct person new_guy;
 	    strcpy(new_guy.name,buffer);
 	    new_guy.balance = 0;
 	    binsert(new_guy,np,i);
-
+	    strcpy(names[i],buffer);
 	}
-	readline(buffer);
-	while (strlen(buffer) > 1){
+	while (readline(buffer,fin) > 1){
         char name[MAX_NAME_LENGTH];
+        struct person *host,*guest;
+        int cost,friend_num,average_get;
         strcpy(name,buffer);
-        readline(buffer);
-
-        np[binsearch(name,np,person_num)]
-
+        host=&np[binsearch(name,np,person_num)];
+        char temp[readline(buffer,fin)];
+        split(buffer,temp);
+        friend_num=atoi(temp);
+        cost=atoi(buffer);
+        printf("Cost:%d to %d friends\n",cost,friend_num);
+        if(friend_num>0){
+            average_get=cost/friend_num;
+            cost=average_get*friend_num;
+            (*host).balance-=cost;
+            for(;friend_num>0;friend_num--){
+                readline(buffer,fin);
+                strcpy(name,buffer);
+                guest = &np[binsearch(name,np,person_num)];
+                (*guest).balance+=average_get;
+            }
+        }
 	}
-    print_persons(np,person_num);
-	printf("%s",buffer);
-	chunk = get_line(fin);
-	printf("%s",chunk);
-
+    //print_persons(np,person_num);
+    for(i=0;i<person_num;i++){
+        fputs(names[i],fout);
+        fputs(" ",fout);
+        char balance[5];
+//        itoa(np[binsearch(names[i],np,person_num)].balance,balance);
+        sprintf(balance,"%d",np[binsearch(names[i],np,person_num)].balance);
+        fputs(balance,fout);
+        fputs("\n",fout);
+    }
+    fclose(fout);
+    fclose(fin);
 }
