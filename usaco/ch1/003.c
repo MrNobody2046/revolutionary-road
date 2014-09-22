@@ -10,13 +10,11 @@ TASK: friday
 
 #define START_YEAR 1900
 
-
 struct year
 {
     int *daynum;
     int fisrtday; // 0-6, represent the first day is which day of week
 };
-
 
 int isleapyear(int year){
     if((year%4==0&&year%100!=0)||(year%400==0))
@@ -34,7 +32,6 @@ int readoffset(){
     return ret;
 }
 
-
 int daycount(struct year y){
     int i,count=0;
     for(i=0;i<12;i++){
@@ -47,11 +44,11 @@ void count13(struct year y,int res[]){
     int i,month_lastday;
     month_lastday = (y.fisrtday + 6) % 7;
     for(i=0;i<12;i++){
-        printf("%d,",(month_lastday + 13) % 7);
+        //printf("%d,",(month_lastday + 13) % 7);
         res[(month_lastday + 13) % 7]++;
         month_lastday = (month_lastday + y.daynum[i]) % 7;
     }
-    printf("\n");
+    //printf("\n");
 }
 
 int main(){
@@ -64,13 +61,13 @@ int main(){
     for(i=0;i<offset;i++){
         struct year temp;
         if(isleapyear(START_YEAR+i)==1){
-            printf("is leap %d\n",START_YEAR+i);
+            //printf("is leap %d\n",START_YEAR+i);
             temp.daynum = leap;
         }
         else
             temp.daynum = norm;
         temp.fisrtday = (lastday+1) % 7;
-        printf("%d\n",lastday);
+        //printf("%d\n",lastday);
         lastday = (lastday + daycount(temp)) % 7;
         count13(temp,res);
 
@@ -80,13 +77,15 @@ int main(){
     char count[10];
     fout = fopen("friday.out","w");
     for(i=0;i<7;i++){
-        printf("%d,%d\n",i,res[i]);
-        sprintf(count,"%d",res[i]);
+        sprintf(count,"%d",res[(i+12)%7]);
         fputs(count,fout);
-        fputs(" ",fout);
+        if ((i+12)%7!=4){
+            fputs(" ",fout);
+        }
+        else
+            fputs("\n",fout);
     }
     fclose(fout);
     exit(0);
 //    printf("Isleap:%d",readoffset());
-
 }
