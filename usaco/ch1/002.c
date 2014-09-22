@@ -19,8 +19,14 @@ struct person
 
 
 int readline(char buffer[],FILE *f){
+    int i;
+    for(i=0;i<=MAX_LINE_LENGTH;i++){
+        *(buffer+i)=0;
+    }
     fgets(buffer, MAX_LINE_LENGTH, f);
-    *(buffer+strlen(buffer)-1)=0;
+    if(*(buffer+strlen(buffer)-1)==10){
+        *(buffer+strlen(buffer)-1)=0;
+        }
     return strlen(buffer);
     }
 
@@ -55,7 +61,7 @@ int binsearch(char *name, struct person list[],int length){
         if (cond < 0)
             high = mid;
         else if (cond > 0)
-            low = mid;
+            low = mid+1;
         else
             return mid;
     };
@@ -64,29 +70,31 @@ int binsearch(char *name, struct person list[],int length){
 
 int binsert(struct person p, struct person list[],int length){
     int cond;
-    int low,mid,high;
+    int low,mid,high,insert_into;
     low = mid = 0;
     high = length; //this length is valid persons in list, not the array size.
+    mid = high / 2;
     while (low < high){
-        mid = (low+high) / 2;
         cond = pcmp(p,list[mid]);
         if (cond < 0)
-            high = mid -1;
-        else if (cond > 0)
-            low = mid + 1;
+            high = mid;
         else
+            low = mid+1;
+        if ((high-low)<=0){
             break;
+        }
+        mid = low + (high-low) / 2;
     }
-    mid = (low+high) / 2;
-//    printf("Insert Person'%s' into index:%d\n",p.name,mid);
-    if(mid<length){
+    insert_into = low;
+    //printf("Insert Person'%s' into index:%d\n",p.name,insert_into);
+    if(insert_into<length){
         int i=length;
-        for(;i>mid;i--){
+        for(;i>insert_into;i--){
             list[i]=list[i-1];
         }
     }
-    list[mid] = p;
-    return mid;
+    list[insert_into] = p;
+    return insert_into;
 }
 
 void split(char line[],char ret[]){
@@ -134,7 +142,7 @@ int main(){
         split(buffer,temp);
         friend_num=atoi(temp);
         cost=atoi(buffer);
-        printf("Cost:%d to %d friends\n",cost,friend_num);
+        //printf("Cost:%d to %d friends\n",cost,friend_num);
         if(friend_num>0){
             average_get=cost/friend_num;
             cost=average_get*friend_num;
@@ -142,12 +150,15 @@ int main(){
             for(;friend_num>0;friend_num--){
                 readline(buffer,fin);
                 strcpy(name,buffer);
+                if(average_get>0){
                 guest = &np[binsearch(name,np,person_num)];
                 (*guest).balance+=average_get;
+                //printf("Friend[%s],get:%d\n",(*guest).name,average_get);
+                }
             }
         }
 	}
-    //print_persons(np,person_num);
+    print_persons(np,person_num);
     for(i=0;i<person_num;i++){
         fputs(names[i],fout);
         fputs(" ",fout);
@@ -159,4 +170,5 @@ int main(){
     }
     fclose(fout);
     fclose(fin);
+    exit(0);
 }
