@@ -20,7 +20,7 @@ struct person
 
 int readline(char buffer[],FILE *f){
     int i;
-    for(i=0;i<=MAX_LINE_LENGTH;i++){
+    for(i=0;i<MAX_LINE_LENGTH;i++){
         *(buffer+i)=0;
     }
     fgets(buffer, MAX_LINE_LENGTH, f);
@@ -86,7 +86,7 @@ int binsert(struct person p, struct person list[],int length){
         mid = low + (high-low) / 2;
     }
     insert_into = low;
-    //printf("Insert Person'%s' into index:%d\n",p.name,insert_into);
+    printf("Insert Person'%s' into index:%d\n",p.name,insert_into);
     if(insert_into<length){
         int i=length;
         for(;i>insert_into;i--){
@@ -113,6 +113,7 @@ void split(char line[],char ret[]){
 }
 
 int main(){
+
 	FILE *fin, *fout;
 	int person_num,i;
 	char buffer[MAX_LINE_LENGTH];
@@ -132,7 +133,7 @@ int main(){
 	    binsert(new_guy,np,i);
 	    strcpy(names[i],buffer);
 	}
-	while (readline(buffer,fin) > 1){
+	while (readline(buffer,fin) >= 1){
         char name[MAX_NAME_LENGTH];
         struct person *host,*guest;
         int cost,friend_num,average_get;
@@ -142,7 +143,7 @@ int main(){
         split(buffer,temp);
         friend_num=atoi(temp);
         cost=atoi(buffer);
-        //printf("Cost:%d to %d friends\n",cost,friend_num);
+        printf("Cost:%d to %d friends\n",cost,friend_num);
         if(friend_num>0){
             average_get=cost/friend_num;
             cost=average_get*friend_num;
@@ -162,7 +163,7 @@ int main(){
     for(i=0;i<person_num;i++){
         fputs(names[i],fout);
         fputs(" ",fout);
-        char balance[5];
+        char balance[MAX_NAME_LENGTH];
 //        itoa(np[binsearch(names[i],np,person_num)].balance,balance);
         sprintf(balance,"%d",np[binsearch(names[i],np,person_num)].balance);
         fputs(balance,fout);
