@@ -21,15 +21,9 @@ int read_lines(char data[][MAX_LINE_LENGTH]){
         if(*(data[i] + strlen(data[i]) - 1)=='\n'){
             *(data[i] + strlen(data[i]) - 1) = 0; //remove \n
             }
-        printf("readline:\"%s\"\n",data[i]);
         i ++;
-
     }
     return i;
-}
-
-void write_lines(){
-    return;
 }
 
 int compare(int target[],int sample[]){
@@ -64,23 +58,19 @@ void bisect(int data[],int trunk[][2],int length,int (*compare)(int [],int [])){
         }
     }
     copy(data,trunk[mid],2);
-
 }
 
 void read_points(int ret[2],char c[]){
     int l = strlen(c);
     int i, j, k;
-    char temp[l];
     i = j = k = 0;
+    char temp[l];
     for(;i<=l;i++){
-        if(c[i]!=' '&&c[i]!='\0'){
-            temp[k] = c[i];
-            k ++;
-        }
+        if(c[i]!=' '&&c[i]!='\0')
+            temp[k] = c[i], k++;
         else{
             temp[k++] = '\n';
-            ret[j] = atoi(temp);
-            j ++;
+            ret[j] = atoi(temp), j++;
             k = 0;
         }
     }
@@ -88,12 +78,10 @@ void read_points(int ret[2],char c[]){
     
 int main(){
     char data[MAX_FARMER_NUM][MAX_LINE_LENGTH];
-    int farmer_num;
+    int farmer_num,i;
     read_lines(data);
     farmer_num = atoi(data[0]);
-    int i;
-    int data_points[farmer_num][2];
-    int temp[2];
+    int data_points[farmer_num][2],temp[2];
     int (*comp)(int[],int[]) = compare;
     for(i=0;i<farmer_num;i++){
         read_points(temp,data[i+1]);
