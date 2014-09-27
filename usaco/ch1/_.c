@@ -13,7 +13,7 @@ int main(){
     char tmp[7],*ptmp;
     char buffer[] = "A test";
     char *a="A";
-    printf("%s\n",buffer);
+    printf("%s\n",buffer);a
     int p1=1,p2=1;
     if(buffer[0]==65){
         printf("%s\n\n","passed 65");
@@ -21,9 +21,7 @@ int main(){
     if(buffer[0]==*a){
         printf("%s\n\n","passed A");
     }
-    if(*buffer[0]==65){
-        printf("%s\n\n","passed A");
-    }
+
     freopen("ride.in","r",stdin);
     freopen("ride.out","w",stdout);
     for(ptmp=tmp,scanf("%s",tmp);*ptmp!='\0';p1*=*ptmp++-64);

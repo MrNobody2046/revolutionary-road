@@ -48,6 +48,10 @@ for i in range(13):
         max_counts = length
         break
     count = temp - 1
+    if fstart < 0:
+        fstart = start
+    else:
+        if start
 
     if pre_start < 0:
         pre_start = end

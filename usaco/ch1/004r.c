@@ -20,13 +20,14 @@ void readline(FILE *f, char trunk[]){
 }
 
 void partion(char trunk[], int res[], int index, int length){
+    // start to end is half closed interval  ->> [start,end) then trunk[end] is another journey
     int start;
     start = index + length;
     char flag, temp;
     flag = trunk[start % length];
     int j=0;
     while(j < length){
-        j --;
+        j ++;
         start --;
         temp = trunk[start % length];
         if(temp != flag && temp != 'w'){
@@ -37,12 +38,13 @@ void partion(char trunk[], int res[], int index, int length){
                 flag = temp;
         }
     };
-    start = (start + 1) % length;
-    int remain;
-    remain = (index + j + length) % length;
+    if(j==length){
+        res[0] = res[1] = 0;
+        return;
+    }
+    start = (start + 1 + length) % length;
     int end=index;
-    j =0;
-    while(j<remain){
+    while(j < length){
         j ++;
         end ++;
         temp = trunk[end % length];
@@ -50,22 +52,21 @@ void partion(char trunk[], int res[], int index, int length){
             break;
         }
     }
-    if(end<1){
-        end += length;
-    }
-    end = (--end) % length;
-
+    end = (end + length) % length;
     printf("Start:%d,end:%d\n",start,end);
     res[0] = start;
     res[1] = end;
 }
 
 int count_distance(int start, int end, int length){
+    printf("\t%d-->%d\n",start,end);
     if(start > end){
-        return length - start + end + 1;
+        return length - start + end;
     }
+    else if(start < end)
+        return end - start;
     else
-        return end - start + 1;
+        return length;
 }
 
 int main(){
@@ -81,36 +82,27 @@ int main(){
     length = strlen(data);
     printf("Len:%d\n",length);
     partion(data,res,0,length);
-    int start,fend,end;
-    start = res[0];
-    fend = res[1];
-    int i=0;
-    printf("Start:%d,end:%d\n",start,fend);
-    if(count_distance(start,fend,length)==length){
+    int fstart,start,fend,end;
+    start = fstart = res[0];
+    end = fend = res[1];
+    int i=0,count=0;
+    if(count_distance(fstart,fend,length)==length){
         max_count = length;
     }
     else{
         while(1){
-            partion(data,res,(res[1]+1)%length,length);
+            partion(data,res,(res[1])%length,length);
+            count = count_distance(start,res[1],length);
             start = res[0];
-            end =res[1];
-            counts[i] = count_distance(start,end,length);
-            printf("%d\n",count_distance(start,end,length));
-            i ++;
-            if((fend-end)==0)
+            end = res[1];
+            if(count>max_count){
+                max_count = count;
+            }
+            if(fend==res[1]&&fstart==res[0])
                 break;
         }
-        int j,tcount;
-        for(j=0;j<i;j++){
-            tcount = counts[j] + counts[(j+1)%i];
-            if(tcount > max_count){
-                max_count = tcount;
-            }
-        }
     }
-
     char result[1024];
-    printf("\n\n%d",max_count);
     sprintf(result,"%d\n",max_count);
     fputs(result,fout);
     exit(0);
