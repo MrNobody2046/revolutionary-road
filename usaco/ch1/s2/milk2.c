@@ -18,9 +18,8 @@ int read_lines(char data[][MAX_LINE_LENGTH]){
     fin = fopen(NAME,"r");
     int i = 0;
     while(fgets(data[i],MAX_LINE_LENGTH,fin)){
-        if(*(data[i] + strlen(data[i]) - 1)=='\n'){
+        if(*(data[i] + strlen(data[i]) - 1)=='\n')
             *(data[i] + strlen(data[i]) - 1) = 0; //remove \n
-            }
         i ++;
     }
     return i;
@@ -31,26 +30,22 @@ int compare(int target[],int sample[]){
 }
 
 void copy(int from[],int to[],int length){
-    for(length --;length>=0;length--){
+    for(length --;length>=0;length--)
         to[length] = from[length];
-    }
 }
 
 void bisect(int data[],int trunk[][2],int length,int (*compare)(int [],int [])){
     // length is items contains in trunk, not the trunk size.
-    int high = length, low=0;
+    int cond, high = length, low=0;
     int mid = high / 2;
-    int cond;
     while(low < high){
         cond = compare(trunk[mid],data);
-        //printf("%d  %d ;%d\n",trunk[mid][0],data[0],cond);
         if(cond > 0)
             low = mid + 1;
         else
             high = mid;
         mid = low + (high-low) / 2;
     }
-    //printf("insert into[%d]\t%d:%d\n",mid,data[0],data[1]);
     if(mid<length){
         int i=length;
         for(;i>mid;i--){
@@ -87,7 +82,6 @@ int record_max_work(int data[2],int current_max){
 int record_max_idle(int big,int small,int current_max){
     int i;
     i = big - small;
-    printf("a-b:%d-%d\n",big,small);
     if(i > current_max)
         return i;
     return current_max;
@@ -108,7 +102,6 @@ int main(){
     int max_work_time, max_idle_time;
     max_idle_time = max_work_time = 0;
     for(i=0;i<farmer_num;i++){
-        //printf("work from:%d to %d\n",data_points[i][0],data_points[i][1]);
         if(i!=0){
             if(data_points[i][0] > section[1]){ // open new section
                 max_idle_time = record_max_idle(data_points[i][0], section[1], max_idle_time);
@@ -126,11 +119,7 @@ int main(){
     FILE *fout;
     fout = fopen("milk2.out","w");
     char buffer[MAX_LINE_LENGTH];
-    sprintf(buffer,"%d",max_work_time);
+    sprintf(buffer,"%d %d\n",max_work_time, max_idle_time);
     fputs(buffer,fout);
-    fputs(" ",fout);
-    sprintf(buffer,"%d",max_idle_time);
-    fputs(buffer,fout);
-    fputs("\n",fout);
     exit(0);
 }
