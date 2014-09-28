@@ -43,14 +43,14 @@ void bisect(int data[],int trunk[][2],int length,int (*compare)(int [],int [])){
     int cond;
     while(low < high){
         cond = compare(trunk[mid],data);
-        printf("%d  %d ;%d\n",trunk[mid][0],data[0],cond);
+        //printf("%d  %d ;%d\n",trunk[mid][0],data[0],cond);
         if(cond > 0)
             low = mid + 1;
         else
             high = mid;
         mid = low + (high-low) / 2;
     }
-    printf("insert into[%d]\t%d:%d\n",mid,data[0],data[1]);
+    //printf("insert into[%d]\t%d:%d\n",mid,data[0],data[1]);
     if(mid<length){
         int i=length;
         for(;i>mid;i--){
@@ -75,6 +75,23 @@ void read_points(int ret[2],char c[]){
         }
     }
 }
+
+int record_max_work(int data[2],int current_max){
+    int i;
+    i = data[1] - data[0];
+    if(i > current_max)
+        return i;
+    return current_max;
+}
+
+int record_max_idle(int big,int small,int current_max){
+    int i;
+    i = big - small;
+    printf("a-b:%d-%d\n",big,small);
+    if(i > current_max)
+        return i;
+    return current_max;
+}
     
 int main(){
     char data[MAX_FARMER_NUM][MAX_LINE_LENGTH];
@@ -87,44 +104,24 @@ int main(){
         read_points(temp,data[i+1]);
         bisect(temp, data_points, i, comp);
     }
-    int sorted[farmer_num][2],j;
-    for(i=0,j=0;i<farmer_num;i++){
+    int section[2],j;
+    int max_work_time, max_idle_time;
+    max_idle_time = max_work_time = 0;
+    for(i=0;i<farmer_num;i++){
         //printf("work from:%d to %d\n",data_points[i][0],data_points[i][1]);
         if(i!=0){
-            if(data_points[i][0] > sorted[j-1][1])
-                copy(data_points[i],sorted[j],2),j++;
-            else if(data_points[i][1]>sorted[j-1][1])
-                    sorted[j-1][1] = data_points[i][1];
+            if(data_points[i][0] > section[1]){ // open new section
+                max_idle_time = record_max_idle(data_points[i][0], section[1], max_idle_time);
+                copy(data_points[i],section,2);
+                }
+            else if(data_points[i][1] > section[1])  // extend section
+                section[1] = data_points[i][1];
+            max_work_time = record_max_work(section, max_work_time);
         }
         else{
-            copy(data_points[i],sorted[i],2),j++;
+            copy(data_points[i],section,2);
+            max_work_time = record_max_work(section, max_work_time);
         }
-    }
-    int work_time;
-    int max_work_time=0;
-    int idle[farmer_num],k=0;
-    for(i=0;i<j;i++){
-        //printf("handle from:%d to %d\n",sorted[i][0],sorted[i][1]);
-        work_time = sorted[i][1] - sorted[i][0];
-        if(work_time > max_work_time)
-            max_work_time = work_time;
-        if(i==0)
-            idle[k] = sorted[i][1],k++;
-        else{
-            idle[k] = sorted[i][0],k++;
-            idle[k] = sorted[i][1],k++;
-        }
-    }
-    int idle_length = k;
-    i = 0;
-    int idle_time, max_idle_time;
-    while(1){
-        if(i>=k-1)
-            break;
-        idle_time = idle[i+1] - idle[i];
-        if(idle_time > max_idle_time)
-            max_idle_time = idle_time;
-        i += 2;
     }
     FILE *fout;
     fout = fopen("milk2.out","w");
