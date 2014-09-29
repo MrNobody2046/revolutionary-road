@@ -18,27 +18,31 @@ void copy(int from[],int to[],int length){
 void transform(int point[2],int ret[2],int size,int type){
     int temp[2];
     switch(type){
-        case 0:{ // 90
+        case 1:{ // 90
+        ret[0] = point[1], ret[1] = size - point[0] -1;
+        break; }
+        case 2:{ // 180
+        ret[0] = size - point[0] -1, ret[1] = size - point[1] -1;
+        break; }
+        case 3:{ // 270
         ret[0] = size - point[1] -1, ret[1] = point[0];
         break; }
-        case 1:{ // 180
-        ret[0] = size - point[0] - 1, ret[1] = size - point[1] - 1;
+        case 4:{ // flip horizontal
+        ret[0] = point[0]; ret[1] = size - point[1] - 1;
         break; }
-        case 2:{ // 270
-        ret[0] = point[1], ret[1] = size - point[0] - 1;
+        case 5:{ // flip horizontal + 90
+        transform(point, temp, size, 4), transform(temp, ret, size, 1);
         break; }
-        case 3:{ // flip horizontal
-        ret[0] = point[0], ret[1] = size - point[1] - 1;
+        case 6:{ // flip horizontal + 180
+        transform(point, temp, size, 4), transform(temp, ret, size, 2);
         break; }
-        case 4:{ // flip horizontal + 90
-        transform(point, temp, size, 3), transform(temp, ret, size, 0);
+        case 7:{ // flip horizontal + 270
+        transform(point, temp, size, 4), transform(temp, ret, size, 3);
         break; }
-        case 5:{ // flip horizontal + 180
-        transform(point, temp, size, 3), transform(temp, ret, size, 1);
+        case 8:{ // not change
+        ret[0] = point[0], ret[1] = point[1];
         break; }
-        case 6:{ // flip horizontal + 270
-        transform(point, temp, size, 3), transform(temp, ret, size, 2);
-        break; }
+
     }
 }
 
@@ -48,39 +52,31 @@ void printp(int point[2]){
 
 
 int main(){
-//    int p[]={1,1};
-//    int ret[2];
-//    transform(p,ret,5,0);
-//    printp(ret);
-//    transform(p,ret,5,1);
-//    printp(ret);
-//    transform(p,ret,5,2);
-//    printp(ret);
-//    transform(p,ret,5,3);
-//    printp(ret);
-//    transform(p,ret,5,4);
-//    printp(ret);
-
-    FILE *fin,fout;
+    FILE *fin,*fout;
     fin = fopen("transform.in","r");
     char temp[MAX_LINE_LENGTH];
     fgets(temp,MAX_LINE_LENGTH,fin);
     int size = atoi(temp),i,j,type;
-    printf("size:%d",size);
-    char orig[size][size];
+    int orig[size][size];
     for(i=0;i<size;i++){
         fgets(temp,MAX_LINE_LENGTH,fin);
-        *(temp+size * sizeof(char)) = '\0';
-        strcpy(orig[i],temp);
+        for(j=0;j<size;j++){
+            if(*(temp+j)=='-')
+                orig[i][j] = 0;
+            else
+                orig[i][j] = 1;}
     }
-    char changed[size][size];
+    int changed[size][size];
     for(i=0;i<size;i++){
         fgets(temp,MAX_LINE_LENGTH,fin);
-        *(temp+size * sizeof(char)) = '\0';
-        strcpy(changed[i],temp);
+        for(j=0;j<size;j++){
+            if(*(temp+j)=='-')
+                changed[i][j] = 0;
+            else
+                changed[i][j] = 1;}
     }
     int op[2],tp[2],brk=0,passed=-1;
-    for(type=0;type<7;type++){
+    for(type=1;type<9;type++){
         for(i=0;i<size;i++){
             if(brk==1)
                 break;
@@ -88,20 +84,26 @@ int main(){
                 op[0] = i,op[1] = j;
                 transform(op,tp,size,type);
                 printp(op),printp(tp);
-                printf("Compare[%c] with [%c]\n",orig[i][j],changed[tp[0]][tp[1]]);
                 if(orig[i][j] != changed[tp[0]][tp[1]]){
                     brk = 1;
-                    printf("Break@type:%d",type);
                     break; }
                 }
             }
-        if(brk==1)
-            brk =0;
-        else{
-            passed =type;
-            break;
-        }
+        if(brk==0){
+            passed = type;
+            break;}
+        brk = 0;
     }
+    if(passed>=5&&passed<=7)
+        passed = 5;
+    else if(passed==8)
+        passed = 6;
+    else if(passed==-1)
+        passed = 7;
+    else
     printf("Passed:%d",passed);
+    fout = fopen("transform.out","w");
+    sprintf(temp,"%d\n",passed);
+    fputs(temp,fout);
     exit(0);
 }
