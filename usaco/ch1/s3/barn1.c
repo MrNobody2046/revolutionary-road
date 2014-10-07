@@ -16,7 +16,7 @@ void bisect(int num,int list[],int length){
     int low, mid, high;
     low = 0, mid = length / 2, high = length;
     while(low < high){
-        if((list[mid] - num) > 0)
+        if((num - list[mid]) > 0)
             low = mid + 1;
         else
             high = mid;
@@ -33,21 +33,24 @@ int main(){
     freopen(OUTPUT, "w", stdout);
     int m, s, c;
     scanf("%d %d %d\n", &m, &s, &c);
-    int i, j = 0, k;
-    int stalls[c];
-    for(i=0;i<=c;i++){
-        k = j;
-        if(j > 0){
-            scanf("%d", &j);
-            printf("%d\n",j-k);
-            bisect(j-k, stalls, i);
-        }
-        else
-            scanf("%d", &j);
+    int i, j = 0, k, min = 0;
+    int stalls[c],span[c-1];
+    for(i=0;i<c;i++){
+        scanf("%d", &j);
+        bisect(j, stalls, i);
     }
-//    for(i=0;i<c;i++){
-//        printf("%d\n",stalls[i]);
-//    }
 
+    for(i=0;i<c-1;i++){
+        bisect(stalls[i+1]-stalls[i], span, i);
+    }
+
+    if(m>c)
+        printf("%d\n",c);
+    else{
+        for(i=0;i<c-m;i++){
+            min += span[i];
+        }
+        printf("%d\n",min+m);
+    }
     exit(0);
 }
