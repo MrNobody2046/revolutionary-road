@@ -16,6 +16,13 @@ typedef struct {
     int y;
 } Rect;
 
+Rect rotate(Rect r){
+    Rect ret;
+    ret.x = r.y;
+    ret.y = r.x;
+    return ret;
+}
+
 int sum_x(Rect rs[],int i){
     int j, sum=0;
     for(j=0;j<i;j++){
@@ -76,14 +83,42 @@ int sum(int li[]){
     return sum;
 }
 
+Rect case5(Rect rs[]){
+    int x, y, crack_y, crack_x;
+    Rect ret;
+    x = rs[0].x + rs[1].x;
+    y = num2li2int(rs[0].y, rs[1].y, 0, 0, 0) + rs[2].y;
+    int min_y=rs[0].y;
+    if(min_y > rs[1].y){
+        min_y = rs[1].y;
+    }
+    crack_y = y - min_y;
+}
+
 Rect packing(Rect rs[], int type){
     // line
     Rect ret;
     switch(type){
-        case 0:ret.x = sum_x(rs, 4),ret.y=max_y(rs, 4);
+        case 0:
+        ret.x = sum_x(rs, 4);
+        ret.y= max_y(rs, 4);
+        break;
         case 1:
         ret.x = num2li2int(sum_x(rs, 3), rs[3].x, 0, 0, 0);
         ret.y = num2li2int(max_y(rs, 3), rs[3].y, 0, 0, 1);
+        break;
+        case 2:
+        ret.x = num2li2int(sum_x(rs, 2), rs[2].x, 0, 0, 0) + rs[3].x;
+        ret.y = num2li2int(num2li2int(max_y(rs, 2),rs[2].y, 0, 0, 1), rs[3].y, 0, 0, 0);
+        break;
+        case 3:
+        ret.x = num2li2int(max_x(rs, 2), rs[2].x, rs[3].x, 0, 1);
+        ret.y = num2li2int(rs[0].y+rs[1].y, rs[2].y, rs[3].y, 0, 0);
+        break;
+        case 4:
+        ret.x = num2li2int(max_x(rs, 2), rs[2].x, rs[3].x, 0, 1);
+        ret.y = num2li2int(rs[0].y+rs[1].y, rs[2].y, rs[3].y, 0, 0);
+        break;
     }
     return ret;
 }
@@ -101,9 +136,10 @@ int main(){
     Rect rects[4];
     for(i=0;i<4;i++){
         scanf("%d %d",&rects[i].x,&rects[i].y);
-
+//        print_rect(rects[i]);
     }
-    print_rect(packing(rects,0));
-    print_rect(packing(rects,1));
+    for(i=0;i<4;i++){
+        print_rect(packing(rects,i));
+    }
     exit(0);
 }
