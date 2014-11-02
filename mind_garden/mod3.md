@@ -15,9 +15,15 @@ Proposed by [Hunter](https://github.com/xuhao417347761).
 ##转换为三进制求解
 
 从高位到低位，每次取三位，减去11之后，余下的数补全三位继续这个过程
-最后留下的数字mod3则为结果
+最后留下的数字取3的mod就是结果
 
 ```c
+/*
+ID:sphy1
+LANG: C
+TASK: mod3
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,6 +98,5 @@ int main(){
     printf("result:[%d]",intmod3(stack));
     exit(0);
 }
-
 
 ```
