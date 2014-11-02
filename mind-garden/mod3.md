@@ -18,12 +18,6 @@ Proposed by [Hunter](https://github.com/xuhao417347761).
 最后留下的数字取3的mod就是结果
 
 ```c
-/*
-ID:sphy1
-LANG: C
-TASK: mod3
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,3 +94,7 @@ int main(){
 }
 
 ```
+
+
+扩展问题：N位二进制数对k求域数
+-------------------------

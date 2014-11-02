@@ -1,9 +1,3 @@
-/*
-ID:sphy1
-LANG: C
-TASK: mod3
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
