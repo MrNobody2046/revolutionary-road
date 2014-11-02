@@ -5,7 +5,6 @@
 #define INPUT "mod3.in"
 #define OUTPUT "mod3.out"
 
-
 void minus3(char s[]){
     if(strcmp(s,"100")==0)
         strcpy(s,"001") ;

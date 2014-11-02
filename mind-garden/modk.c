@@ -50,10 +50,6 @@ int main(){
     printf("mod on:[%d], unit lenght:%d\n",k, unit_length);
     char unit[unit_length];
     unit[0] = '\0';
-//    printf("strings:%s(%d), base unit length:%lf\n", input, bin2dec(input), unit_length);
-//    dec2bin(123412, stack);
-//    printf("%s", stack);
-
     while ((tmp = getchar()) != '\n' && tmp != EOF){
         append(tmp, unit);
         //printf("unit:%s\n", unit);
@@ -63,7 +59,6 @@ int main(){
             cnt = strlen(unit);
         }
     }
-
     printf("result:[%d]",bin2dec(unit) % k);
     exit(0);
 }
