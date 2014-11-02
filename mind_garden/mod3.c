@@ -11,9 +11,8 @@ TASK: mod3
 #define INPUT "mod3.in"
 #define OUTPUT "mod3.out"
 
-#define MAX_LEN = 1024
 
-void mod3(char s[]){
+void minus3(char s[]){
     if(strcmp(s,"100")==0)
         strcpy(s,"001") ;
     else if(strcmp(s,"101")==0)
@@ -54,7 +53,6 @@ int bit_length(char s[])
             return 3;
     }
 
-
 void append(int tmp, char *s){
     s[0] = s[1];
     s[1] = s[2];
@@ -67,18 +65,15 @@ int main(){
     int cnt=0,tmp;
     char stack[] = "000";
     while ((tmp = getchar()) != '\n' && tmp != EOF){
-        printf("read:%c\n",tmp);
         append(tmp, stack);
         cnt ++;
         if(cnt==3){
-//            printf("stack:[%s]\n",stack);
-            mod3(stack);
-//            printf("after mod stack:[%s]\n",stack);
+            minus3(stack);
             cnt = bit_length(stack);
         }
     }
     if(bit_length(stack)==3){
-        mod3(stack);
+        minus3(stack);
     }
     printf("result:[%d]",intmod3(stack));
     exit(0);

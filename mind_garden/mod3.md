@@ -18,12 +18,6 @@ Proposed by [Hunter](https://github.com/xuhao417347761).
 最后留下的数字mod3则为结果
 
 ```c
-/*
-ID:sphy1
-LANG: C
-TASK: mod3
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +25,6 @@ TASK: mod3
 #define INPUT "mod3.in"
 #define OUTPUT "mod3.out"
 
-#define MAX_LEN = 1024
 
 void minus3(char s[]){
     if(strcmp(s,"100")==0)
@@ -99,5 +92,6 @@ int main(){
     printf("result:[%d]",intmod3(stack));
     exit(0);
 }
+
 
 ```
