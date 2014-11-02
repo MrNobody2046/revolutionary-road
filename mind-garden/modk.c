@@ -32,7 +32,7 @@ void dec2bin(int d, char *ret){
         ret[i] = m + '0';
         i ++;
     }
-    ret[i] = '\0';
+    ret[i] = 0;
     reverse(ret);
 }
 
@@ -49,7 +49,7 @@ int main(){
     unit_length = log2(k*(k-1));
     printf("mod on:[%d], unit lenght:%d\n",k, unit_length);
     char unit[unit_length];
-    unit[0] = '\0';
+    unit[0] = 0;
     while ((tmp = getchar()) != '\n' && tmp != EOF){
         append(tmp, unit);
         //printf("unit:%s\n", unit);
