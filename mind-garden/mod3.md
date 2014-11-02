@@ -14,7 +14,7 @@ Proposed by [Hunter](https://github.com/xuhao417347761).
 -----
 [tianyi](https://github.com/g7tianyi/my-acm-solutions/blob/master/problems/binary-sequence-mod-3.md)的方案，基于数论
 
-##转换为三进制求解
+###转换为三进制求解
 
 从高位到低位，每次取三位，减去11之后，余下的数补全三位继续这个过程
 最后留下的数字取3的mod就是结果
