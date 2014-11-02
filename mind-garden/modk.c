@@ -6,33 +6,6 @@
 #define INPUT "modk.in"
 #define OUTPUT "modk.out"
 
-
-void minus3(char s[]){
-    if(strcmp(s,"100")==0)
-        strcpy(s,"001") ;
-    else if(strcmp(s,"101")==0)
-        strcpy(s,"010");
-    else if(strcmp(s,"110")==0)
-        strcpy(s,"011");
-    else if(strcmp(s,"111")==0)
-        strcpy(s,"001");
-    else
-        strcpy(s,"error");
-}
-
-int intmod3(char s[]){
-    if(strcmp(s,"000")==0)
-        return 0;
-    else if(strcmp(s,"001")==0)
-        return 1;
-    else if(strcmp(s,"010")==0)
-        return 2;
-    else if(strcmp(s,"011")==0)
-        return 0;
-    else
-        return -1;
-}
-
 int bin2dec(char s[]){
     int i, ret = 0, size = strlen(s);
     for(i=size-1;i>=0;i--){
@@ -62,22 +35,6 @@ void dec2bin(int d, char *ret){
     ret[i] = '\0';
     reverse(ret);
 }
-
-
-int bit_length(char s[])
-    {
-        if(s[0]=='0'){
-            if(s[1]=='0')
-                if(s[2]=='0')
-                    return 0;
-                else
-                    return 1;
-            else
-                return 2;
-        }
-        else
-            return 3;
-    }
 
 void append(int tmp, char *s){
     s[strlen(s)] = tmp + '0';
