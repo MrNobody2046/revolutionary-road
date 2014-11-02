@@ -12,7 +12,7 @@ Proposed by [Hunter](https://github.com/xuhao417347761).
 
 求解
 -----
-［tianyi］(https://github.com/g7tianyi/my-acm-solutions/blob/master/problems/binary-sequence-mod-3.md)的方案，基于数论
+[tianyi](https://github.com/g7tianyi/my-acm-solutions/blob/master/problems/binary-sequence-mod-3.md)的方案，基于数论
 
 ##转换为三进制求解
 
