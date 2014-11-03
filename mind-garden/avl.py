@@ -45,46 +45,22 @@ class Node(object):
 
 class Tree(object):
     def __init__(self):
-        pass
+        self.root = None
 
     @classmethod
-    def build_tree(cls,array):
+    def build_tree(cls, array):
         pass
 
 
-
-a = [1, 42, 3, 6, 7, 0, 123, -1, 19, 2]
-
-
-class MinStack():
-    stack = []
-    min_stack = []
-
-    def push(self, i):
-        self.stack.append(i)
-        if len(self.min_stack) == 0 or i <= self.min_stack[-1]:
-            self.min_stack.append(i)
-
-    def pop(self):
-        i = self.stack.pop()
-        if i == self.min_stack[-1]:
-            self.min_stack.pop()
-        return i
-
-    def finMin(self):
-        return self.min_stack[-1]
+    def insert_data(self, data):
+        node = Node(data)
+        if not self.root:
+            self.root = node
+        else:
 
 
-ms = MinStack()
-for i in a:
-    ms.push(i)
-    print ms.stack
-    print ms.finMin()
-print "\n\n"
-for i in a:
-    print "pop", ms.pop()
-    print ms.stack
-    print ms.finMin()
+
+
 
 
 
