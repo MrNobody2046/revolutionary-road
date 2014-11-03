@@ -8,6 +8,7 @@ class Node(object):
         self.left = left
         self.right = right
         self.balance = 0
+        self.parent = None
 
     @property
     def is_leaf(self):
@@ -91,14 +92,18 @@ class Node(object):
 
 
     def append_left(self, node):
+        #TODO 旋转代码
         self.left = node
+        node.parent = self.left
         if not self.right:
             self.height += 1
         self.balance += 1
         return self
 
     def append_right(self, node):
+        #TODO 旋转代码
         self.right = node
+        node.parent = self.right
         if not self.left:
             self.height += 1
         self.balance -= 1
