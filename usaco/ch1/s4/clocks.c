@@ -8,7 +8,7 @@ TASK: clocks
 #include <stdlib.h>
 #include <string.h>
 
-#define INPUT "orig.in"
+#define INPUT "clocks.in"
 #define OUTPUT "clocks.out"
 
 int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
