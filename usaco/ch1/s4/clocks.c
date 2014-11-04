@@ -28,7 +28,8 @@ int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
 
 int idx = 0;
 int ret[4];
-int orig[9];
+int orig[9] = {9,9,12,6,6,6,6,3,6};
+
 int tmp[9];
 
 void rotate(int input[], int methods[], int output[])
