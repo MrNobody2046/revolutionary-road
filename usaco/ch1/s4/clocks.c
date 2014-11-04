@@ -22,13 +22,10 @@ int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
                         {0,0,0,0,1,1,0,1,1} };
 
 //粗暴的方法是枚举，看着好像方程组
-//
-//
 
 
 int idx = 0;
 int ret[4];
-//int orig[9] = {9,9,12,6,6,6,6,3,6};
 int orig[9];
 int tmp[9];
 
@@ -82,22 +79,15 @@ void roll(int candidates[], int length, int selected)
         //do something
         int j;
         copy(orig, tmp);
-//        printf("in:");
-//        print_array(tmp);
         for(j=0;j<4;j++)
         {
             rotate(tmp, rotations[ret[j]], tmp);
         }
-//        printf("ot:");
-//        print_array(tmp);
-//        printf("rs:");
-//        print_array(ret);
+
         if(sum(tmp)==0)
         {
             print_array(ret);
         }
-
-        //finished
         return;
     }
     int i;
@@ -125,12 +115,6 @@ int main()
     {
         orig[i] = orig[i] / 3;
     }
-//    rotate(orig, rotations[3]);
-//    rotate(orig, rotations[4]);
-//    rotate(orig, rotations[7]);
-//    rotate(orig, rotations[8]);
-    printf("orig:");
-    print_array(orig);
     int cc[] = {0,1,2,3,4,5,6,7,8};
     roll(cc, 9, 4);
     exit(0);
