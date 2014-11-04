@@ -8,7 +8,7 @@ TASK: clocks
 #include <stdlib.h>
 #include <string.h>
 
-#define INPUT "clocks.in"
+#define INPUT "orig.in"
 #define OUTPUT "clocks.out"
 
 int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
@@ -25,13 +25,91 @@ int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
 //
 //
 
-void opt(int clocks[], int opts[])
+
+int idx = 0;
+int ret[4];
+int orig[9];
+int tmp[9];
+
+void rotate(int input[], int methods[], int output[])
 {
     int i;
     for(i=0;i<9;i++)
     {
-        clocks[i] = (clocks[i] + opts[i]) % 4;
+        output[i] = (input[i] + methods[i]) % 4;
     }
+}
+
+int sum(int li[])
+{
+    int i, sum;
+    for(i=0;i<9;i++)
+    {
+        sum += li[i];
+    }
+    return sum;
+}
+
+int print_array(int li[])
+{
+    int i, size= sizeof(li);
+    for(i=0;i<size;i++)
+    {
+        printf("%d ",li[i]);
+    }
+    printf("\n");
+}
+
+void copy(int from[], int cpyto[])
+{
+    int i, size = 9;
+    for(i=0;i<size;i++)
+    {
+        cpyto[i] = from[i];
+    }
+
+}
+
+void roll(int candidates[], int length, int selected)
+{
+    if(length < selected)
+    {
+        return;
+    }
+    if(selected <= 0)
+    {
+//        print_array(ret);
+        //do something
+        int j;
+        copy(orig, tmp);
+        printf("in:");
+        print_array(tmp);
+        for(j=0;j<4;j++)
+        {
+            rotate(tmp, rotations[ret[j]], tmp);
+        }
+        printf("ot:");
+        print_array(tmp);
+        printf("rs:");
+        print_array(ret);
+        if(sum(tmp)==0)
+        {
+            print_array(ret);
+        }
+
+        //finished
+        return;
+    }
+    int i;
+    for(i=0;i<length;i++)
+    {
+        ret[idx] = candidates[i];
+        idx ++;
+        //roll(candidates+i, length-i-1, selected-1)
+        roll(candidates, length, selected-1);
+        idx --;
+    }
+    return;
 }
 
 int main()
@@ -39,24 +117,24 @@ int main()
     freopen(INPUT, "r", stdin);
     freopen(OUTPUT, "w", stdout);
     int i;
-    int clocks[9];
     for(i=0;i<3;i++)
     {
-        scanf("%d %d %d", &clocks[3*i], &clocks[3*i+1], &clocks[3*i+2]);
+        scanf("%d %d %d", &orig[3*i], &orig[3*i+1], &orig[3*i+2]);
     }
     for(i=0;i<9;i++)
     {
-        clocks[i] = clocks[i] / 3;
+        orig[i] = orig[i] / 3;
+        printf("%d\t", orig[i]);
     }
-    opt(clocks, rotations[3]);
-    opt(clocks, rotations[4]);
-    opt(clocks, rotations[7]);
-    opt(clocks, rotations[8]);
+//    rotate(orig, rotations[3]);
+//    rotate(orig, rotations[4]);
+//    rotate(orig, rotations[7]);
+//    rotate(orig, rotations[8]);
     for(i=0;i<9;i++)
     {
-        printf("%d\t", clocks[i]);
+        printf("%d\t", orig[i]);
     }
-
-
+    int cc[] = {0,1,2,3,4,5,6,7,8};
+    roll(cc, 9, 4);
     exit(0);
 }
