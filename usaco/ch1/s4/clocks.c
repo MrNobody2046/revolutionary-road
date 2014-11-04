@@ -28,8 +28,8 @@ int rotations[9][9] = { {1,1,0,1,1,0,0,0,0},
 
 int idx = 0;
 int ret[4];
-int orig[9] = {9,9,12,6,6,6,6,3,6};
-
+//int orig[9] = {9,9,12,6,6,6,6,3,6};
+int orig[9];
 int tmp[9];
 
 void rotate(int input[], int methods[], int output[])
@@ -43,7 +43,7 @@ void rotate(int input[], int methods[], int output[])
 
 int sum(int li[])
 {
-    int i, sum;
+    int i, sum = 0;
     for(i=0;i<9;i++)
     {
         sum += li[i];
@@ -79,20 +79,19 @@ void roll(int candidates[], int length, int selected)
     }
     if(selected <= 0)
     {
-//        print_array(ret);
         //do something
         int j;
         copy(orig, tmp);
-        printf("in:");
-        print_array(tmp);
+//        printf("in:");
+//        print_array(tmp);
         for(j=0;j<4;j++)
         {
             rotate(tmp, rotations[ret[j]], tmp);
         }
-        printf("ot:");
-        print_array(tmp);
-        printf("rs:");
-        print_array(ret);
+//        printf("ot:");
+//        print_array(tmp);
+//        printf("rs:");
+//        print_array(ret);
         if(sum(tmp)==0)
         {
             print_array(ret);
@@ -125,16 +124,13 @@ int main()
     for(i=0;i<9;i++)
     {
         orig[i] = orig[i] / 3;
-        printf("%d\t", orig[i]);
     }
 //    rotate(orig, rotations[3]);
 //    rotate(orig, rotations[4]);
 //    rotate(orig, rotations[7]);
 //    rotate(orig, rotations[8]);
-    for(i=0;i<9;i++)
-    {
-        printf("%d\t", orig[i]);
-    }
+    printf("orig:");
+    print_array(orig);
     int cc[] = {0,1,2,3,4,5,6,7,8};
     roll(cc, 9, 4);
     exit(0);
