@@ -195,11 +195,54 @@ if __name__ == "__main__":
     # for i in t.inorder():
     # print i.data
     # for i in Node.levelorder(t.root):
-    #     print i.data
-    root = t.root
-    print root.height
-    print root.left.height
-    print root.left.right.right
-    print t.root.balance
-    print t.root.left.height
+    # print i.data
+    # root = t.root
+    # print root.height
+    # print root.left.height
+    # print root.left.right.right
+    # print t.root.balance
+    # print t.root.left.height
+
+
+    import math
+
+    pre = ["A", "B", "D", None, None, "E", "F", "G", "C", None, None, None, None, None, None]
+
+    def preorder_list_to_tree(data_list):
+        """
+        :param data_list:
+        :return:the root node of tree
+        """
+        li = [data for data in data_list]
+        def from_preorder(depth):
+            """
+            pop one data from list as root
+            then build its child recursive
+            :param depth:
+            :return:
+            """
+            root = Node(li.pop(0))
+            if depth == 1:
+                return root
+            else:
+                root.append_left(from_preorder(depth - 1))
+                root.append_right(from_preorder(depth - 1))
+            return root
+
+        return from_preorder(math.log(1 + len(li), 2))
+
+    root = preorder_list_to_tree(pre)
+    restored = [i.data for i in Node.preorder(root)]
+    assert restored == pre
+
+    def test_preorder_list_to_tree():
+        import random
+        for depth in range(3,12):
+            test_data = [random.randint(1,100) for i in xrange(int(math.pow(2,depth)))]
+            test_data.pop()
+            restored = [i.data for i in Node.preorder(preorder_list_to_tree(test_data))]
+            assert restored == test_data
+            print test_data
+
+    test_preorder_list_to_tree()
 
