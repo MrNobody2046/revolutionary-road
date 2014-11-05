@@ -26,7 +26,7 @@ class Node(object):
             h = Node.get_height(node)
             if h > max_child_height:
                 max_child_height = h
-        if max_child_height == 1:
+        if self.is_root and max_child_height == 1:
             # left and right is all leaf
             return 1
         else:
@@ -194,22 +194,12 @@ if __name__ == "__main__":
     #
     # for i in t.inorder():
     # print i.data
-    for i in Node.levelorder(t.root):
-        print i.data
+    # for i in Node.levelorder(t.root):
+    #     print i.data
     root = t.root
-    # print root.left.height
-    # print root.left.right.right
-    # print t.root.balance
-    # print t.root.left.height
+    print root.height
+    print root.left.height
+    print root.left.right.right
+    print t.root.balance
+    print t.root.left.height
 
-
-
-    n = Node(1)
-    # _f = lambda x:x.height if x else 0
-    # a = EnvironmentError()
-    # a.height = 1
-    # print _f(a)
-    # n.left = Node(2)
-    # n.right = Node(3)
-    # print n.height
-    # print n.balance
