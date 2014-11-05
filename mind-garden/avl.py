@@ -17,9 +17,10 @@ class Node(object):
             node_name = "root"
         return "<%s:[%s]>" % (node_name, self.data)
 
+    __repr__ = __str__
+
     @property
     def height(self):
-        print "g"
         max_child_height = 0
         for node in (self.left, self.right):
             h = Node.get_height(node)
@@ -113,18 +114,19 @@ class Node(object):
         """
         li = [node]
         current = [node]
-        while max([i.height for i in current]) > 0:
-            cnt = 0
-            for i in current:
-                left = i.left
-                right = i.right
-                if left:
-                    li.append(left)
-                    cnt += 1
-                if right:
-                    li.append(right)
-                    cnt += 1
-            current = li[-cnt:]
+
+        while len(current) > 0:
+            cnt = -1
+            for node in current:
+                for _n in (node.left, node.right):
+                    if _n:
+                        li.append(_n)
+                        cnt -= 1
+            if cnt == -1:
+                current = []
+            else:
+                current = li[cnt + 1:]
+            print li, current
         return li
 
 
@@ -144,11 +146,13 @@ class Node(object):
         if data > self.data:
             if self.right:
                 return self.right.insert(data)
-            self.append_right(Node(data))
+            else:
+                return self.append_right(Node(data))
         elif data < self.data:
             if self.left:
                 return self.left.insert(data)
-            self.append_left(Node(data))
+            else:
+                return self.append_left(Node(data))
         else:
             raise Exception("Alread exist %s!" % data)
 
@@ -178,23 +182,23 @@ if __name__ == "__main__":
     # 直接生成的话：
     # *               1(root
     # *            /      \
-    # *          -1       4
-    # *            \    /   \
-    # *             0   3    124
-    # *              \
-    # *               12
-    # */
+    # *          -1        4
+    # *         /         / \
+    # *        0         3  123
+    # *                  \
+    # *                   12
+    # *
     #
     for i in a:
         t.insert_data(i)
-        #
-        # # for i in t.inorder():
-        #    # print i.data
-        #    for i in Node.levelorder(t.root):
-        #        print i.data
+    #
+    # for i in t.inorder():
+    # print i.data
+    for i in Node.levelorder(t.root):
+        print i.data
     root = t.root
-    print root.left.height
-    print root.left.right.right
+    # print root.left.height
+    # print root.left.right.right
     # print t.root.balance
     # print t.root.left.height
 
