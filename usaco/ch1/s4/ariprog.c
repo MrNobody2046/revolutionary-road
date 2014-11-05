@@ -12,6 +12,7 @@ TASK: ariprog
 #define OUTPUT "ariprog.out"
 int POW_TABLE[250];
 int idx=0;
+int maxcomb;
 int ret[2];
 
 int *ALL;
@@ -28,7 +29,7 @@ void build_pow_list(int max)
 
 int print_array(int li[])
 {
-    int i, size= 64;
+    int i, size= maxcomb;
     for(i=0;i<size;i++)
     {
         printf("%d ",li[i]);
@@ -59,6 +60,9 @@ void comb(int array[], int length, int picked)
 }
 
 int in_comb(int number){
+    if(number>=maxcomb){ // if not append equal ,can't pass case 1
+        return 0;
+    }
     if(ALL[number]==0)
     {
         return 0;
@@ -75,6 +79,7 @@ int found(int start,int b,int needed)
             return 0;
         }
     }
+    return 1;
 }
 
 int main(){
@@ -82,9 +87,9 @@ int main(){
     freopen(OUTPUT, "w", stdout);
     int N, M;
     scanf("%d\n%d", &N, &M);
-    int maxcomb = M*M;
+    maxcomb = M*M*2+1;
     build_pow_list(M);
-    ALL = (int*)malloc(2*M*M*sizeof(int));
+    ALL = (int*)malloc(maxcomb*sizeof(int));
     int i;
     for(i=0;i<maxcomb;i++)
     {
@@ -94,16 +99,21 @@ int main(){
     comb(POW_TABLE,M+1,2); // list all a^2 + b^2
 //    print_array(ALL);
 //    printf("%d\n%d", (int)sizeof(ALL), ALL[64]);
-    int max_b = M*M*2/N + 1;
-    int b,start;
-    for(start=0;start<maxcomb;start++){
-        for(b=0;b<=max_b;b++)
-        {
+    int max_b = M*M*2/(N - 1);
+    int b,start,none=0;
+    for(b=1;b<=max_b;b++)
+    {
+        for(start=0;start<maxcomb;start++){
+//            printf("detect:%d %d neeed:%d\n", start, b, N);
             if(found(start,b,N)!=0)
             {
                 printf("%d %d\n", start, b);
+                none ++;
             }
         }
+    }
+    if(none==0){
+        printf("%s\n","NONE");
     }
     exit(0);
 }
