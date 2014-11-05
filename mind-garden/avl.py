@@ -1,14 +1,42 @@
-#coding:utf-8
+# coding:utf-8
 
 
 class Node(object):
     def __init__(self, data, left=None, right=None):
-        self.height = 0
         self.data = data
         self.left = left
         self.right = right
-        self.balance = 0
         self.parent = None
+
+
+    def __str__(self):
+        node_name = "node"
+        if self.is_leaf:
+            node_name = "leaf"
+        if self.is_root:
+            node_name = "root"
+        return "<%s:[%s]>" % (node_name, self.data)
+
+    @property
+    def height(self):
+        print "g"
+        max_child_height = 0
+        for node in (self.left, self.right):
+            h = Node.get_height(node)
+            if h > max_child_height:
+                max_child_height = h
+        if max_child_height == 1:
+            # left and right is all leaf
+            return 1
+        else:
+            return max_child_height + 1
+
+
+    @property
+    def balance(self):
+        _b = 0
+        node_height = [Node.get_height(node) for node in (self.left, self.right)]
+        return node_height[0] - node_height[1]
 
     @property
     def is_leaf(self):
@@ -18,11 +46,20 @@ class Node(object):
             return True
 
     @property
+    def is_root(self):
+        return False if self.parent else True
+
+
+    @property
     def empty(self):
         if not self.left and not self.right:
             return Tree
         else:
             return False
+
+    @classmethod
+    def get_height(cls, node):
+        return node.height if node else 0
 
     @classmethod
     def inorder(cls, node):
@@ -92,21 +129,15 @@ class Node(object):
 
 
     def append_left(self, node):
-        #TODO 旋转代码
+        # TODO 旋转代码
         self.left = node
-        node.parent = self.left
-        if not self.right:
-            self.height += 1
-        self.balance += 1
+        node.parent = self
         return self
 
     def append_right(self, node):
-        #TODO 旋转代码
+        # TODO 旋转代码
         self.right = node
-        node.parent = self.right
-        if not self.left:
-            self.height += 1
-        self.balance -= 1
+        node.parent = self
         return self
 
     def insert(self, data):
@@ -144,25 +175,37 @@ class Tree(object):
 if __name__ == "__main__":
     t = Tree()
     a = [1, 4, 3, 123, -1, 0, 12]
-# 直接生成的话：
- # *               1(root
- # *            /      \
- # *          -1       4
- # *            \    /   \
- # *             0   3    124
- # *              \
- # *               12
- # */
-
+    # 直接生成的话：
+    # *               1(root
+    # *            /      \
+    # *          -1       4
+    # *            \    /   \
+    # *             0   3    124
+    # *              \
+    # *               12
+    # */
+    #
     for i in a:
         t.insert_data(i)
+        #
+        # # for i in t.inorder():
+        #    # print i.data
+        #    for i in Node.levelorder(t.root):
+        #        print i.data
+    root = t.root
+    print root.left.height
+    print root.left.right.right
+    # print t.root.balance
+    # print t.root.left.height
 
-    # for i in t.inorder():
-    # print i.data
-    for i in Node.levelorder(t.root):
-        print i.data
 
 
-
-
-
+    n = Node(1)
+    # _f = lambda x:x.height if x else 0
+    # a = EnvironmentError()
+    # a.height = 1
+    # print _f(a)
+    # n.left = Node(2)
+    # n.right = Node(3)
+    # print n.height
+    # print n.balance
