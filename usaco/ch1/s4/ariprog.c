@@ -41,6 +41,8 @@ int print_array(int li[], int length)
 
 void comb(int array[], int length, int picked)
 {
+	printf("square_table:");
+	print_array(array, length);
     if(length < picked){
         return;
     }
@@ -150,7 +152,10 @@ int main(){
     bukets = (int*)malloc(max_pow*sizeof(int));
     square_table = (int*)malloc((M+1)*sizeof(int));
     build_pow_list(M+1);
+    printf("square_table:");
+
     print_array(square_table, M+1);
+    square_table[4] = 12226;  // 不能赋值？？you kidding me
     int i;
     for(i=0;i<max_pow;i++)
     {
@@ -158,25 +163,25 @@ int main(){
     }
     comb(square_table,M+1,2); // list all a^2 + b^2
 //    printf("%d\n%d", (int)sizeof(bukets), bukets[64]);
-    int max_b = M*M*2/(N - 1); // 最大公差
-    int ordered_comb[max_pow]; //顺序的存放bukets里的东西
-    int real_comb_len = build_order_list(ordered_comb, max_pow);
-    print_array(ordered_comb,real_comb_len);
-    int b,start,none=0;
-
-    for(b=1;b<=max_b;b++)
-    {
-        for(start=0;start<real_comb_len;start++){
-            printf("%d %d\n", ordered_comb[start], b);
-            if(found2(start,b,N, ordered_comb, real_comb_len)!=0)
-            {
-                printf("f:%d %d\n", ordered_comb[start], b);
-                none ++;
-            }
-        }
-    }
-    if(none==0){
-        printf("%s\n","NONE");
-    }
+//    int max_b = M*M*2/(N - 1); // 最大公差
+//    int ordered_comb[max_pow]; //顺序的存放bukets里的东西
+//    int real_comb_len = build_order_list(ordered_comb, max_pow);
+//    print_array(ordered_comb,real_comb_len);
+//    int b,start,none=0;
+//
+//    for(b=1;b<=max_b;b++)
+//    {
+//        for(start=0;start<real_comb_len;start++){
+//            printf("%d %d\n", ordered_comb[start], b);
+//            if(found2(start,b,N, ordered_comb, real_comb_len)!=0)
+//            {
+//                printf("f:%d %d\n", ordered_comb[start], b);
+//                none ++;
+//            }
+//        }
+//    }
+//    if(none==0){
+//        printf("%s\n","NONE");
+//    }
     exit(0);
 }
