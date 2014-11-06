@@ -1,6 +1,6 @@
 
 
-长度为3的不连续有序子序列问题（暂定名）
+长度为3的不连续有序子序列问题
 ================
 Proposed by  [tianyi](https://github.com/g7tianyi/)
 
@@ -30,8 +30,16 @@ def found_and_fill(array):
                     ret.pop()
     _find(0, 3)
 found_and_fill(test)
-```
 
+
+--------------out put-----------------
+
+    Found: [1, 2, 3]
+    Found: [1, 2, 4]
+    Found: [1, 3, 4]
+    Found: [2, 3, 4]
+    
+```
 c语言版本的实现：
 
 ```c
@@ -48,7 +56,7 @@ int tmp_data;
 
 void found_and_fill(int current_array_idx, int seleted) {
     int i;
-	if (seleted <= 0) {
+    if (seleted <= 0) {
 		for (i = 0; i < con; i++) {
 			printf("%d\t", ret[i]);
 		}
@@ -60,7 +68,7 @@ void found_and_fill(int current_array_idx, int seleted) {
 		if (ret_idx > 0 && ret[ret_idx] < tmp_data || ret_idx == 0) {
 			ret[ret_idx] = array[current_array_idx];
 			ret_idx++;
-			found_and_fill(current_array_idx, seleted - 1);
+			found_and_fill(current_array_idx+1, seleted - 1);
 			ret_idx--;
 		}
 	}
