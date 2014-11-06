@@ -212,7 +212,6 @@ if __name__ == "__main__":
     #
     for i in a:
         t.insert_data(i)
-    1/0
     # for i in t.inorder():
     # print i.data
     # for i in Node.levelorder(t.root):
