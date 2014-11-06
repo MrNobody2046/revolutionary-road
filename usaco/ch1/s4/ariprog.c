@@ -10,7 +10,7 @@ TASK: ariprog
 
 #define INPUT "ariprog.in"
 #define OUTPUT "ariprog.out"
-int *pow_table;
+int *square_table;
 int idx=0;
 int max_pow;
 int ret[2];
@@ -24,7 +24,7 @@ void build_pow_list(int max)
     int i;
     for(i=0;i<=max;i++)
     {
-        pow_table[i] = i * i;
+        square_table[i] = i * i;
     }
 }
 
@@ -148,15 +148,15 @@ int main(){
     scanf("%d\n%d", &N, &M);
     max_pow = M*M*2+1;
     bukets = (int*)malloc(max_pow*sizeof(int));
-    pow_table = (int*)malloc((M+1)*sizeof(int));
+    square_table = (int*)malloc((M+1)*sizeof(int));
     build_pow_list(M+1);
-    print_array(pow_table, M+1);
+    print_array(square_table, M+1);
     int i;
     for(i=0;i<max_pow;i++)
     {
         *(bukets + sizeof(int)*i) = 0;
     }
-    comb(pow_table,M+1,2); // list all a^2 + b^2
+    comb(square_table,M+1,2); // list all a^2 + b^2
 //    printf("%d\n%d", (int)sizeof(bukets), bukets[64]);
     int max_b = M*M*2/(N - 1); // 最大公差
     int ordered_comb[max_pow]; //顺序的存放bukets里的东西
