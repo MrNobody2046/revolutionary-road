@@ -1,11 +1,17 @@
 
 
-最大连续有序子序列问题
+最大连续有序子序列问题（暂定名）
 ================
 给你一个序列A，比如 1 2 3 4 1 求三个元素 Ai Aj Ak 满足 Ai < Aj Ak < Aj, i < j < k
 算一下一共有多少种取法
 1 2 3 4 1 一共6种取法
 
+
+
+# 解法1
+
+dfs，按顺序匹配后面的元素，输出符合顺序关系的Ai Aj Ak，
+先贴python的代码，简单好懂
 
 ```python
 test = [1, 2, 3, 4, 1]
@@ -24,6 +30,8 @@ def found_and_fill(array):
     _find(0, 3)
 found_and_fill(test)
 ```
+
+c语言版本的实现：
 
 ```c
 #include <stdio.h>
