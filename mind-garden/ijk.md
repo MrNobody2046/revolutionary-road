@@ -47,34 +47,48 @@ c语言版本的实现：
 #include <stdlib.h>
 #include <string.h>
 
+#define ret_length 3
+
 int array[5] = { 1, 2, 3, 4, 1};
-int con = 3;
-int length = sizeof(array);
-int ret[3];
+int length = sizeof(array) / sizeof(int); //这里如果不除一下，64位机子是20
+int ret[ret_length];
 int ret_idx = 0;
 int tmp_data;
 
 void found_and_fill(int current_array_idx, int seleted) {
     int i;
     if (seleted <= 0) {
-		for (i = 0; i < con; i++) {
-			printf("%d\t", ret[i]);
-		}
-		printf("\n");
-		return;
-	}
-	for (; current_array_idx < length; current_array_idx++) {
-		tmp_data = array[current_array_idx];
-		if (ret_idx > 0 && ret[ret_idx] < tmp_data || ret_idx == 0) {
-			ret[ret_idx] = array[current_array_idx];
-			ret_idx++;
-			found_and_fill(current_array_idx+1, seleted - 1);
-			ret_idx--;
-		}
-	}
+        for (i = 0; i < ret_length; i++) {
+            printf("%d ", ret[i]);
+        }
+        printf("\n");
+        return;
+    }
+    for (; current_array_idx < length; current_array_idx++) {
+        tmp_data = array[current_array_idx];
+        if (tmp_data > ret[ret_idx-1] || ret_idx == 0) {
+        //注意这里和python版本的不同！我是掉坑里了，写出了如下表达：
+        // (ret_idx > 0 && ret[ret_idx] < tmp_data || ret_idx == 0)
+            ret[ret_idx] = array[current_array_idx];
+            ret_idx++;
+            found_and_fill(current_array_idx+1, seleted - 1);
+            ret_idx--;
+        }
+    }
 }
 
 int main() {
-	found_and_fill(0, 3);
+    int i;
+    for(i=0;i<ret_length;i++){
+        ret[i] = 0;
+    }
+    found_and_fill(0, ret_length);
 }
+
+--------------out put-----------------
+
+    1 2 3
+    1 2 4 
+    1 3 4
+    2 3 4
 ```
