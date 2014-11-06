@@ -120,10 +120,8 @@ int main() {
 	if (bukets == NULL || square_table == NULL) {
 		exit(-1);
 	}
-	free(square_table);
 	build_pow_list(M + 1);
 	printf("square_table:");
-
 	print_array(square_table, M + 1);
 	square_table[4] = 12226;  // 不能赋值？？you kidding me
 	int i;
