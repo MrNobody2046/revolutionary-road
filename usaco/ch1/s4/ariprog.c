@@ -148,9 +148,9 @@ int main(){
     scanf("%d\n%d", &N, &M);
     max_pow = M*M*2+1;
     bukets = (int*)malloc(max_pow*sizeof(int));
-    pow_table = (int*)malloc(max_pow*sizeof(int));
-    build_pow_list(M);
-    print_array(pow_table, max_pow);
+    pow_table = (int*)malloc((M+1)*sizeof(int));
+    build_pow_list(M+1);
+    print_array(pow_table, M+1);
     int i;
     for(i=0;i<max_pow;i++)
     {
