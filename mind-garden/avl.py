@@ -2,6 +2,9 @@
 
 
 class Node(object):
+    LEFT = "left"
+    RIGHT = "right"
+
     def __init__(self, data, left=None, right=None):
         self.data = data
         self.left = left
@@ -130,16 +133,32 @@ class Node(object):
         return li
 
 
+    def rotate(self, grand, ):
+
+
     def append_left(self, node):
-        # TODO 旋转代码
-        self.left = node
-        node.parent = self
+        self._append(node,side=Node.LEFT)
         return self
 
     def append_right(self, node):
+        self._append(node,side=Node.RIGHT)
+        return self
+
+    def _append(self, node, side=None):
         # TODO 旋转代码
-        self.right = node
+        if side == Node.LEFT:
+            self.left = node
+        else:
+            self.right = node
         node.parent = self
+        rotate_method = [side]
+        if self is self.parent.right:
+            rotate_method.insert(0, Node.RIGHT)
+        elif self is self.parent.left:
+            rotate_method.insert(0, Node.LEFT)
+        else:
+            raise Exception("orphan node :%s" % self)  # self not belong to its parent
+        self.rotate(self.parent, rotate_method)  # pass grand node
         return self
 
     def insert(self, data):
@@ -157,7 +176,7 @@ class Node(object):
             raise Exception("Alread exist %s!" % data)
 
 
-class Tree(object):
+class Tree(Node):
     def __init__(self):
         self.root = None
 
@@ -214,6 +233,7 @@ if __name__ == "__main__":
         :return:the root node of tree
         """
         li = [data for data in data_list]
+
         def from_preorder(depth):
             """
             pop one data from list as root
@@ -237,8 +257,9 @@ if __name__ == "__main__":
 
     def test_preorder_list_to_tree():
         import random
-        for depth in range(3,12):
-            test_data = [random.randint(1,100) for i in xrange(int(math.pow(2,depth)))]
+
+        for depth in range(3, 12):
+            test_data = [random.randint(1, 100) for i in xrange(int(math.pow(2, depth)))]
             test_data.pop()
             restored = [i.data for i in Node.preorder(preorder_list_to_tree(test_data))]
             assert restored == test_data
