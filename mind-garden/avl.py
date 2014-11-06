@@ -133,8 +133,8 @@ class Node(object):
         return li
 
 
-    def rotate(self, grand, ):
-
+    def rotate(self, grand, rotate_method):
+        print grand.balance
 
     def append_left(self, node):
         self._append(node,side=Node.LEFT)
@@ -152,13 +152,15 @@ class Node(object):
             self.right = node
         node.parent = self
         rotate_method = [side]
-        if self is self.parent.right:
-            rotate_method.insert(0, Node.RIGHT)
-        elif self is self.parent.left:
-            rotate_method.insert(0, Node.LEFT)
-        else:
-            raise Exception("orphan node :%s" % self)  # self not belong to its parent
-        self.rotate(self.parent, rotate_method)  # pass grand node
+        print "insert:",self,node
+        if self.parent:
+            if self is self.parent.right:
+                rotate_method.insert(0, Node.RIGHT)
+            elif self is self.parent.left:
+                rotate_method.insert(0, Node.LEFT)
+            else:
+                raise Exception("orphan node :%s" % self)  # self not belong to its parent
+            self.rotate(self.parent, rotate_method)  # pass grand node
         return self
 
     def insert(self, data):
@@ -210,7 +212,7 @@ if __name__ == "__main__":
     #
     for i in a:
         t.insert_data(i)
-    #
+    1/0
     # for i in t.inorder():
     # print i.data
     # for i in Node.levelorder(t.root):
