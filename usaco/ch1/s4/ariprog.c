@@ -10,14 +10,12 @@
 
 #define INPUT "ariprog.in"
 #define OUTPUT "ariprog.out"
-int *square_table;
+int *square_table; //平方表
+int *bukets; // 组合平方表中的可能 放入的桶
 int idx = 0;
 int max_pow;
 int ret[2];
 
-int *bukets;
-
-//todo 排序，仅搜索可见数列
 
 void build_pow_list(int max) {
 	int i;
@@ -25,6 +23,7 @@ void build_pow_list(int max) {
 		square_table[i] = i * i;
 	}
 }
+
 
 void print_array(int li[], int length) {
 	int i;
@@ -82,7 +81,8 @@ int binsearch(int low, int high, int target, int list[]) {
 	return -1;
 }
 
-int found2(int start_idx, int b, int needed, int comb_list[], int comb_length) {
+int found_sequence(int start_idx, int b, int needed, int comb_list[],
+		int comb_length) {
 	int i, j, a, next;
 	a = comb_list[start_idx];
 	for (i = 0; i < needed; i++) {
@@ -111,7 +111,7 @@ int build_order_list(int ret[], int size) {
 }
 int main() {
 	freopen(INPUT, "r", stdin);
-    freopen(OUTPUT, "w", stdout);
+	freopen(OUTPUT, "w", stdout);
 	int N, M;
 	scanf("%d\n%d", &N, &M);
 	max_pow = M * M * 2 + 1;
@@ -139,7 +139,7 @@ int main() {
 	for (b = 1; b <= max_b; b++) {
 		for (start = 0; start < real_comb_len; start++) {
 			printf("%d %d\n", ordered_comb[start], b);
-			if (found2(start, b, N, ordered_comb, real_comb_len) != 0) {
+			if (found_sequence(start, b, N, ordered_comb, real_comb_len) != 0) {
 				printf("f:%d %d\n", ordered_comb[start], b);
 				none++;
 			}
