@@ -87,15 +87,15 @@ int found_sequence(int start_idx, int b, int needed, int comb_list[],
 	a = comb_list[start_idx];
 	for (i = 0; i < needed; i++) {
 		next = a + i * b;
-		printf("l:%d,h:%d,want:%d\t", start_idx, comb_length, next);
+//		printf("l:%d,h:%d,want:%d\t", start_idx, comb_length, next);
 		start_idx = binsearch(start_idx, comb_length, next, comb_list);
 		if (start_idx == -1) {
-			printf("\n");
+//			printf("\n");
 			return 0;
 		}
 		start_idx = 0;
 	}
-	printf("\n");
+//	printf("\n");
 	return 1;
 }
 
@@ -110,10 +110,10 @@ int build_order_list(int ret[], int size) {
 	return j;
 }
 int main() {
-	freopen(INPUT, "r", stdin);
-	freopen(OUTPUT, "w", stdout);
-	int N, M;
-	scanf("%d\n%d", &N, &M);
+    int N=5, M=7;
+//	freopen(INPUT, "r", stdin);
+//	freopen(OUTPUT, "w", stdout);
+//	scanf("%d\n%d", &N, &M);
 	max_pow = M * M * 2 + 1;
 	bukets = (int*) malloc(max_pow * sizeof(int));
 	square_table = (int*) malloc((M + 1) * sizeof(int));
@@ -129,6 +129,7 @@ int main() {
 		*(bukets + sizeof(int) * i) = 0;
 	}
 	comb(square_table, M + 1, 2); // list all a^2 + b^2
+	free(square_table);
 	printf("%d\n%d", (int) sizeof(bukets), bukets[64]);
 	int max_b = M * M * 2 / (N - 1); // 最大公差
 	int ordered_comb[max_pow]; //顺序的存放bukets里的东西
@@ -138,7 +139,7 @@ int main() {
 
 	for (b = 1; b <= max_b; b++) {
 		for (start = 0; start < real_comb_len; start++) {
-			printf("%d %d\n", ordered_comb[start], b);
+//			printf("%d %d\n", ordered_comb[start], b);
 			if (found_sequence(start, b, N, ordered_comb, real_comb_len) != 0) {
 				printf("f:%d %d\n", ordered_comb[start], b);
 				none++;
