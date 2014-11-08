@@ -1,3 +1,5 @@
+# coding:utf-8
+
 def issort(li, cmp=lambda x, y: x < y, key=lambda x: x):
     """
     in place insert sort.
@@ -34,6 +36,45 @@ def bubble_sort(li, cmp=lambda x, y: x < y, key=lambda x: x):
             j += 1
         i += 1
     return li
+
+
+def partition(li, start, end, cmp=lambda x, y: x < y, key=lambda x: x):
+    tmp = li[start]
+    while start != end:
+        while True:
+            if cmp(key(li[end]), key(tmp)):
+                li[end], li[start] = li[start], li[end]
+                break
+            elif start != end:
+                end -= 1
+            else:
+                break
+        while True:
+            if not cmp(key(li[start]), key(tmp)):
+                li[end], li[start] = li[start], li[end]
+                break
+            elif start != end:
+                start += 1
+            else:
+                break
+    return start
+
+
+def my_qsort(li, cmp=lambda x, y: x < y, key=lambda x: x):
+    start = 0
+    end = len(li) - 1
+    seg_idx = partition(li, start, end, cmp=cmp, key=key)
+    if seg_idx - start >= 2:
+        li[:seg_idx] = qsort(li[:seg_idx], cmp=cmp, key=key)
+    if end - seg_idx >= 1:
+        li[seg_idx + 1:] = qsort(li[seg_idx + 1:], cmp=cmp, key=key)
+    return li
+
+
+def qsort(L):
+    if len(L) <= 1: return L
+    return qsort([lt for lt in L[1:] if lt < L[0]]) + [L[0]] + \
+           qsort([ge for ge in L[1:] if ge >= L[0]])
 
 
 if __name__ == "__main__":
