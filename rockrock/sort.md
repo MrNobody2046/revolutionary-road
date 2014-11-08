@@ -18,7 +18,7 @@
  - [**15, 17, 19, 20, 30,** 99]
  - [**15, 17, 19, 20, 30, 99**]
 
-代码,python
+python实现
 ```python
 def issort(li, cmp=lambda x, y: x < y, key=lambda x: x):
     """
@@ -42,7 +42,7 @@ def issort(li, cmp=lambda x, y: x < y, key=lambda x: x):
             li[j + 1] = temp
         i += 1
 ```
-c语言
+c语言实现
 ```c
 int issort(void *data, int size, int esize,
 		int (*compare)(const void *key1, const void *key2)) {
@@ -75,8 +75,8 @@ int issort(void *data, int size, int esize,
 [30, 99, **20, 19, 17, 15**]
 [99, **30, 20, 19, 17, 15**]
 [**99, 30, 20, 19, 17, 15**]
-    
 
+python实现
 ```python
 
 def bubble_sort(li, cmp=lambda x, y: x < y, key=lambda x: x):
@@ -93,6 +93,7 @@ def bubble_sort(li, cmp=lambda x, y: x < y, key=lambda x: x):
 
 ```
 
+c语言实现，swap函数以后会经常用到
 ```c
 int bubble_sort(void *data, int size, int esize,
 		int (*compare)(const void *key1, const void *key2)) {
@@ -113,6 +114,18 @@ int bubble_sort(void *data, int size, int esize,
 	return 0;
 }
 
+int swap(void *a, void *b, int esize) {
+	void *tmp;
+	if ((tmp = malloc(esize)) == NULL) {
+		return -1;
+	}
+	memcpy(tmp, a, esize);
+	memcpy(a, b, esize);
+	memcpy(b, tmp, esize);
+	free(tmp);
+	return 0;
+}
+
 ```
 
 快速排序
@@ -123,7 +136,7 @@ int bubble_sort(void *data, int size, int esize,
     然后递归的继续分区，直到区块的长度小于2，此时每个分区都是有序的
     快排结束
 
-比较naive直观的写法
+比较直观的写法
 ```python
 def partition(li, start, end, cmp=lambda x, y: x < y, key=lambda x: x):
     tmp = li[start]
