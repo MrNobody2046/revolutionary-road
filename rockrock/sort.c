@@ -23,16 +23,47 @@ int issort(void *data, int size, int esize,
 	return 0;
 }
 
+int swap(void *a, void *b, int esize) {
+	void *tmp;
+	if ((tmp = malloc(esize)) == NULL) {
+		return -1;
+	}
+	memcpy(tmp, a, esize);
+	memcpy(a, b, esize);
+	memcpy(b, tmp, esize);
+	free(tmp);
+	return 0;
+}
+
+int bubble_sort(void *data, int size, int esize,
+		int (*compare)(const void *key1, const void *key2)) {
+	int i, j, k;
+	void *a, *b;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size - i - 1; j++) {
+			a = data + j * esize;
+			b = a + esize;
+			if (compare(a, b) > 0) {
+				if (swap(a, b, esize) != 0) {
+					return -1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 int compare(const void *key1, const void *key2) {
 	return *(int *) key1 - *(int *) key2;
 }
 
 void print_array(int li[], int size) {
 	int i;
-	for (i = 0; i < size-1; i++) {
+	for (i = 0; i < size - 1; i++) {
 		printf("%d ", li[i]);
 	}
-	printf("%d\n",li[i++]);
+	printf("%d\n", li[i++]);
 }
 
 int main() {
@@ -41,7 +72,7 @@ int main() {
 	int (*cmp)(const void *key1, const void *key2);
 	cmp = compare;
 	print_array(test, 6);
-	issort(test, 6, sizeof(int), *cmp);
+	bubble_sort(test, 6, sizeof(int), *cmp);
 	print_array(test, 6);
 	exit(0);
 }

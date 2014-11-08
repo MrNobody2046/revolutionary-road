@@ -9,14 +9,14 @@
     [20, 19, 30, 15, 17, 99]
     排序：
 
-     - insert **19** in li[0]
-     - [**19, 20,** 30, 15, 17, 99]
-     - [**19, 20, 30,** 15, 17, 99]
-     - insert **15** li[0]
-     - [**15, 19, 20, 30,** 17, 99]
-     - insert **17** li[1]
-     - [**15, 17, 19, 20, 30,** 99]
-     - [**15, 17, 19, 20, 30, 99**]
+ - insert **19** in li[0]
+ - [**19, 20,** 30, 15, 17, 99]
+ - [**19, 20, 30,** 15, 17, 99]
+ - insert **15** li[0]
+ - [**15, 19, 20, 30,** 17, 99]
+ - insert **17** li[1]
+ - [**15, 17, 19, 20, 30,** 99]
+ - [**15, 17, 19, 20, 30, 99**]
 
 代码,python
 ```python
@@ -67,7 +67,53 @@ int issort(void *data, int size, int esize,
 ```
 冒泡排序
 ----
-和插入排序是好基友
+    和插入排序是好基友，复杂度也是一样，不过冒泡排序永远是相邻的交换，让未排序的元素不停的上升，下沉。复杂度 (N-1)*N/2
+    排序过程：
+[20, 30, 19, 17, 99, **15**]
+[30, 20, 19, 99, **17, 15**]
+[30, 20, 99, **19, 17, 15**]
+[30, 99, **20, 19, 17, 15**]
+[99, **30, 20, 19, 17, 15**]
+[**99, 30, 20, 19, 17, 15**]
+    
+
+```python
+
+def bubble_sort(li, cmp=lambda x, y: x < y, key=lambda x: x):
+    length = len(li)
+    i = 0
+    while i < length:
+        j = 0
+        while j < length - i - 1:
+            if cmp(key(li[j]), key(li[j + 1])):
+                li[j], li[j + 1] = li[j + 1], li[j]
+            j += 1
+        i += 1
+    return li
+
+```
+
+```c
+int bubble_sort(void *data, int size, int esize,
+		int (*compare)(const void *key1, const void *key2)) {
+	int i, j, k;
+	void *a, *b;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size - i - 1; j++) {
+			a = data + j * esize;
+			b = a + esize;
+			if (compare(a, b) > 0) {
+				if (swap(a, b, esize) != 0) {
+					return -1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+```
 
 快速排序
 ----
