@@ -117,8 +117,58 @@ int bubble_sort(void *data, int size, int esize,
 
 快速排序
 ----
-在一般情况下，快排被认为是最好的，不需要额外空间
+    在一般情况下，快排被认为是最好的，不需要额外空间
+    快排的核心是分区，使得数组按照某个值分为左右两部分
+    左边都比这个值大，右边则都不大于这个值
+    然后递归的继续分区，直到区块的长度小于2，此时每个分区都是有序的
+    快排结束
 
+比较naive直观的写法
+```python
+def partition(li, start, end, cmp=lambda x, y: x < y, key=lambda x: x):
+    tmp = li[start]
+    while start != end:
+        while True:
+            if cmp(key(li[end]), key(tmp)):
+                li[end], li[start] = li[start], li[end]
+                break
+            elif start != end:
+                end -= 1
+            else:
+                break
+        while True:
+            if not cmp(key(li[start]), key(tmp)):
+                li[end], li[start] = li[start], li[end]
+                break
+            elif start != end:
+                start += 1
+            else:
+                break
+    return start
+
+
+def qsort(li, cmp=lambda x, y: x < y, key=lambda x: x):
+    start = 0
+    end = len(li) - 1
+    seg_idx = partition(li, start, end, cmp=cmp, key=key)
+    #注意这里的索引
+    if seg_idx - start >= 2:
+        li[:seg_idx] = qsort(li[:seg_idx], cmp=cmp, key=key)
+    if end - seg_idx >= 1:
+        li[seg_idx + 1:] = qsort(li[seg_idx + 1:], cmp=cmp, key=key)
+    return li
+
+```
+
+Python CookBook 上有名的3行快排
+利用列表推导来做分区，代码好看，而且应该比上面代码要快常数倍的数量级
+实际上测试是3倍，但是python自带的比这个还要快20倍左右
+```python
+def qsort(L):  
+    if len(L) <= 1: return L  
+    return qsort([lt for lt in L[1:] if lt < L[0]]) + [L[0]] + \
+            qsort([ge for ge in L[1:] if ge >= L[0]])  
+```
 希尔排序
 ----
 
