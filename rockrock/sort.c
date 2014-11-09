@@ -66,6 +66,67 @@ void print_array(int li[], int size) {
 	printf("%d\n", li[i++]);
 }
 
+static int partition(void *data, int esize, int i, int k, int (*compare)(const void *key1, const void *key2)){
+    char *a = data;
+    void *pval, *temp;
+    int r[3];
+    if((pval = malloc(esize)) == NULL){
+        return -1;
+    }
+    if((temp = malloc(esize)) == NULL){
+        return -1;
+    }
+    /* use the medain-of-thress method to find the partition value. */
+    r[0] =(rand() % (k - i + 1)) + i;
+    r[1] =(rand() % (k - i + 1)) + i;
+    r[2] =(rand() % (k - i + 1)) + i;
+    issort(r, 3, sizeof(int), compare_int);
+    memcpy(pval, &a[r[1]* esize], esize);
+
+    /* Create two partitions around the partition value. */
+    i --;
+    k ++;
+    while(1){
+        do
+        {
+            k --;
+        }while(compare(&a[k * esize], pval) > 0);
+        do
+        {
+            i ++;
+        }while(compare(&a[i * esize], pval) < 0);
+
+        if(i >= k){
+            break;
+        }
+        else{
+            swap(&a[k * esize],&a[i * esize]);
+        }
+    }
+    free(pval);
+    free(temp);
+    /*    the position dividing the two partitions */
+    return k;
+}
+
+int qksort(void *data,int size, int esize,int i, int k,int (*compare)(const void *key1, const void *key2))
+{
+    int j;
+    while(i < k)
+    {
+        if((j = partition(data,esize,i,k,compare)) < 0){
+            return -1;
+        }
+        if(qksort(data, size, esize, i, j , compare) <0){
+            return -1;
+        }
+        i = j + 1;
+
+    }
+    return 0;
+}
+
+
 int main() {
 
 	int test[] = { 20, 19, 30, 15, 17, 99, };
