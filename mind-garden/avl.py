@@ -5,65 +5,16 @@ class Node(object):
     LEFT = "left"
     RIGHT = "right"
 
-    def __init__(self, data, left=None, right=None):
-        self.data = data
-        self.left = left
-        self.right = right
-        self.parent = None
-
-
-    def __str__(self):
-        node_name = "node"
-        if self.is_leaf:
-            node_name = "leaf"
-        if self.is_root:
-            node_name = "root"
-        return "<%s:[%s]>" % (node_name, self.data)
-
-    __repr__ = __str__
-
-    @property
-    def height(self):
-        max_child_height = 0
-        for node in (self.left, self.right):
-            h = Node.get_height(node)
-            if h > max_child_height:
-                max_child_height = h
-        if self.is_root and max_child_height == 1:
-            # left and right is all leaf
-            return 1
-        else:
-            return max_child_height + 1
-
-
-    @property
-    def balance(self):
-        _b = 0
-        node_height = [Node.get_height(node) for node in (self.left, self.right)]
-        return node_height[0] - node_height[1]
-
-    @property
-    def is_leaf(self):
-        if self.left or self.right:
-            return False
-        else:
-            return True
-
-    @property
-    def is_root(self):
-        return False if self.parent else True
-
-
-    @property
-    def empty(self):
-        if not self.left and not self.right:
-            return Tree
-        else:
-            return False
-
-    @classmethod
-    def get_height(cls, node):
+    @staticmethod
+    def get_height(node):
         return node.height if node else 0
+
+
+    @staticmethod
+    def build_tree(li):
+        root = Node(li[0])
+        _ = [root.insert(i) for i in li[1:]]
+        return root
 
     @classmethod
     def inorder(cls, node):
@@ -131,6 +82,62 @@ class Node(object):
                 current = li[cnt + 1:]
             print li, current
         return li
+
+
+    def __init__(self, data, left=None, right=None):
+        self.data = data
+        self.left = left
+        self.right = right
+        self.parent = None
+
+    def __str__(self):
+        node_name = "node"
+        if self.is_leaf:
+            node_name = "leaf"
+        if self.is_root:
+            node_name = "root"
+        return "<%s:[%s]>" % (node_name, self.data)
+
+    __repr__ = __str__
+
+    @property
+    def height(self):
+        max_child_height = 0
+        for node in (self.left, self.right):
+            h = Node.get_height(node)
+            if h > max_child_height:
+                max_child_height = h
+        if self.is_root and max_child_height == 1:
+            # left and right is all leaf
+            return 1
+        else:
+            return max_child_height + 1
+
+
+    @property
+    def balance(self):
+        _b = 0
+        node_height = [Node.get_height(node) for node in (self.left, self.right)]
+        return node_height[0] - node_height[1]
+
+    @property
+    def is_leaf(self):
+        if self.left or self.right:
+            return False
+        else:
+            return True
+
+    @property
+    def is_root(self):
+        return False if self.parent else True
+
+
+    @property
+    def empty(self):
+        if not self.left and not self.right:
+            return Tree
+        else:
+            return False
 
 
     def rotate(self, grand, rotate_method):
@@ -264,7 +271,7 @@ if __name__ == "__main__":
             test_data.pop()
             restored = [i.data for i in Node.preorder(preorder_list_to_tree(test_data))]
             assert restored == test_data
-            print test_data
+            # print test_data
 
     test_preorder_list_to_tree()
 
