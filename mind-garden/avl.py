@@ -89,6 +89,7 @@ class Node(object):
         self.left = left
         self.right = right
         self.parent = None
+        self.cls = self.__class__
 
     def __str__(self):
         node_name = "node"
@@ -139,17 +140,23 @@ class Node(object):
         else:
             return False
 
+    def is_my_left_child(self, node):
+        return node is self.left
+
+    def is_my_right_child(self, node):
+        return node is self.right
 
     def rotate(self, grand, rotate_method):
+        return
         print grand.balance
 
     def append_left(self, node):
-        self._append(node,side=Node.LEFT)
-        return self
+        self._append(node, side=Node.LEFT)
+        return self, node, Node.LEFT
 
     def append_right(self, node):
-        self._append(node,side=Node.RIGHT)
-        return self
+        self._append(node, side=Node.RIGHT)
+        return self, node, Node.RIGHT
 
     def _append(self, node, side=None):
         # TODO 旋转代码
@@ -159,7 +166,7 @@ class Node(object):
             self.right = node
         node.parent = self
         rotate_method = [side]
-        print "insert:",self,node
+        print "insert:", self, node
         if self.parent:
             if self is self.parent.right:
                 rotate_method.insert(0, Node.RIGHT)
@@ -175,14 +182,32 @@ class Node(object):
             if self.right:
                 return self.right.insert(data)
             else:
-                return self.append_right(Node(data))
-        elif data < self.data:
+                return self.append_right(self.cls(data))
+        elif data <= self.data:
             if self.left:
                 return self.left.insert(data)
             else:
-                return self.append_left(Node(data))
+                return self.append_left(self.cls(data))
         else:
             raise Exception("Alread exist %s!" % data)
+
+
+class SizeNode(Node):
+    """
+      access node size recursively
+    """
+
+    @property
+    def size(self):
+        return self.lsize + self.rsize
+
+    @property
+    def lsize(self):
+        return self.left.size + 1 if self.left else 0
+
+    @property
+    def rsize(self):
+        return self.right.size + 1 if self.right else 0
 
 
 class Tree(Node):
