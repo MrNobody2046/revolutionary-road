@@ -80,7 +80,6 @@ class Node(object):
                 current = []
             else:
                 current = li[cnt + 1:]
-            print li, current
         return li
 
 
@@ -166,7 +165,6 @@ class Node(object):
             self.right = node
         node.parent = self
         rotate_method = [side]
-        print "insert:", self, node
         if self.parent:
             if self is self.parent.right:
                 rotate_method.insert(0, Node.RIGHT)
@@ -192,7 +190,7 @@ class Node(object):
             raise Exception("Alread exist %s!" % data)
 
 
-class SizeNode(Node):
+class PositionNode(Node):
     """
       access node size recursively
     """
@@ -208,6 +206,30 @@ class SizeNode(Node):
     @property
     def rsize(self):
         return self.right.size + 1 if self.right else 0
+
+    def insert(self, data):
+        """
+        this insert can return the rank of insert data
+        :param data:
+        :return:
+        """
+        rank = 0
+        if data > self.data:
+            if self.right:
+                rank += self.lsize
+                rank += self.right.insert(data) + 1
+            else:
+                self.append_right(self.cls(data))
+                return 1 + self.lsize
+        elif data <= self.data:
+            if self.left:
+                rank += self.left.insert(data)
+            else:
+                self.append_left(self.cls(data))
+                return 0
+        else:
+            raise Exception("Alread exist %s!" % data)
+        return rank
 
 
 class Tree(Node):
