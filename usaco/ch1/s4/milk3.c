@@ -13,19 +13,19 @@
 #define MAX 20
 
 int visited[100][100][100] = { 0 };
-int records[MAX+1] = { 0 };
+int records[MAX + 1] = { 0 };
 int a, b, c;
 
 int search(int vol_a, int vol_b, int vol_c) {
-//	printf("%d %d %d ", vol_a, vol_b, vol_c);
-//	printf("%d", visited[vol_a][vol_b][vol_c]);
-	if (!vol_a) {
+	if (vol_a==0) {
 		records[vol_c]++;
 	}
-	if ((vol_a + vol_b + vol_c) > c) {
-		printf("ERROR");
+	if ((vol_a + vol_b + vol_c) > c || vol_a < 0 || vol_b < 0 || vol_c < 0) {
+		printf("ERROR\n");
+		printf("%d %d %d \n", vol_a, vol_b, vol_c);
+		return -1;
 	}
-	if (visited[vol_a][vol_b][vol_c]) {
+	if (visited[vol_a][vol_b][vol_c] > 0) {
 		return 0;
 	} else {
 		visited[vol_a][vol_b][vol_c]++;
@@ -51,7 +51,7 @@ int search(int vol_a, int vol_b, int vol_c) {
 			return 0;
 		//search(0, 0, vol_c);
 		else
-			search(0, vol_b, vol_c - vol_b);
+			search(0, vol_b, vol_c + vol_a);
 		// pour b->a
 		if (vol_b > avalible_a)
 			search(a, vol_b - a + vol_a, vol_c);
@@ -59,7 +59,7 @@ int search(int vol_a, int vol_b, int vol_c) {
 			search(vol_a + vol_b, 0, vol_c);
 		// pour b->c
 		if (vol_b > avalible_c)
-			search(vol_a, 0, vol_c - vol_a);
+			search(vol_a, 0, vol_c + vol_b);
 		else
 			return 0;
 
@@ -69,19 +69,24 @@ int search(int vol_a, int vol_b, int vol_c) {
 
 int main() {
 	freopen(INPUT, "r", stdin);
-//	freopen(OUTPUT, "w", stdout);
+	freopen(OUTPUT, "w", stdout);
 	scanf("%d %d %d", &a, &b, &c);
-//	printf("%d ", visited[0][0][0]);
+
 //	memset(records, 0, MAX);
-//	memset(visited, 0, MAX * MAX * MAX);
+//	memset(visited, 0, sizeof(visited));
 
 	search(0, 0, c);
-	int i;
-	for (i = 0; i < MAX; i++) {
+	int i, cnt = 0;
+	int ret[MAX];
+	for (i = 0; i < MAX+1; i++) {
 		if (records[i]) {
-			printf("%d ", records[i]);
+			ret[cnt] = i;
+			cnt++;
 		}
 	}
-//	printf("\b\n");
+	for (i = 0; i < cnt - 1; i++) {
+		printf("%d ", ret[i]);
+	}
+	printf("%d\n", ret[cnt - 1]);
 	exit(0);
 }
