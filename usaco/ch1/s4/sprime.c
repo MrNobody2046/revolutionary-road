@@ -7,75 +7,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 #define INPUT "sprime.in"
 #define OUTPUT "sprime.out"
 
-long int map[99999999] = {0}
-
-int numlen(long int num){
-	int j;
-	int long tmp;
-	tmp = num;
-	while (tmp > 0) {
-		tmp /= 10;
-		j++;
+int isprime(long int num) {
+	long int i;
+	if (num == 2) {
+		return 1;
 	}
-	return j;
+	if (num % 2 == 0) {
+		return 0;
+	}
+	long int c = sqrt(num);
+	for (i = 3; i <= c; i += 2) {
+		if (num % i == 0) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
-int gen(int len,int build_map) {
-	long int i, j, k;
-	long int pal;
-	long int half_len = (len + 1) / 2;
-	long int to = pow(10, half_len);
-	long int from = pow(10, half_len - 1) - 1;
-	char mirror[len + 1];
-	char temp[half_len];
-	for (j = from; j < to; j++) {
-		sprintf(temp, "%ld", j);
-		strcpy(mirror, temp);
-		if (half_len >= 1) {
-			if (len % 2 == 0) {
-				for (k = 0; k < half_len; k++) {
-					mirror[half_len + k] = temp[half_len - k - 1];
-				}
-			} else {
-				for (k = 0; k < half_len - 1; k++) {
-					mirror[half_len + k] = temp[half_len - k - 2];
-				}
-			}
-		}
-
-		pal = atoi(mirror);
-
-		if (isprime(pal)) {
-			printf("%ld\n", pal);
-			if(len>1 && build_map!=1){
-				if(map[pal]!=0){
-					printf("ret;%ld\n", pal);
-				}
-			}
-			else{
-				int m;
-				for(m=0;m<numlen(pal);m++){
-
-				}
-
-			}
-		}
+int sprime(int n, int ndigit, int to) {
+	if (ndigit == 0) {
+		printf("%d\n", n);
+		return;
 	}
-	return 0;
+
+	n *= 10;
+	int j = 1;
+	if (ndigit == to) {
+		j = 2;
+	}
+	for (; j <= 9; j++) {
+		if (isprime(n + j))
+			sprime(n + j, ndigit - 1, to);
+	}
 }
 
 int main() {
 	freopen(INPUT, "r", stdin);
-//	freopen(OUTPUT, "w", stdout);
+	freopen(OUTPUT, "w", stdout);
 	int i, n;
 	scanf("%d", &n);
-	for (i = 1; i < n; i++) {
-		gen(i,1);
-	}
-	gen(i,0);
+	sprime(0, n, n);
 	exit(0);
 }
