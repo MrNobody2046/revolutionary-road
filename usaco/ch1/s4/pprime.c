@@ -46,9 +46,8 @@ int ispalindrome(long int num) {
 	return 1;
 }
 
-int palindrome_len;
 
-int generator(int len, int mi, int mx) {
+int gen(int len, int mi, int mx) {
 	long int i, j, k;
 	long int pal;
 	long int half_len = (len + 1) / 2;
@@ -56,12 +55,9 @@ int generator(int len, int mi, int mx) {
 	long int from = pow(10, half_len - 1) - 1;
 	char mirror[len + 1];
 	char temp[half_len];
-	printf("from:%ld, to %ld\n", from, to);
 	for (j = from; j < to; j++) {
 		sprintf(temp, "%ld", j);
-//		printf("%s\n", temp);
 		strcpy(mirror, temp);
-
 		if (half_len >= 1) {
 			if (len % 2 == 0) {
 				for (k = 0; k < half_len; k++) {
@@ -73,18 +69,15 @@ int generator(int len, int mi, int mx) {
 				}
 			}
 		}
-//		printf("%s\n", mirror);
 
 		pal = atoi(mirror);
-		if (pal >= mx) {
+		if (pal > mx) {
 			return 0;
 		}
-//		printf("%ld\n", pal);
 		if (isprime(pal)) {
 			if (pal >= mi) {
 				printf("%ld\n", pal);
 			}
-
 		}
 	}
 	return 0;
@@ -92,22 +85,24 @@ int generator(int len, int mi, int mx) {
 
 int main() {
 	freopen(INPUT, "r", stdin);
-//	freopen(OUTPUT, "w", stdout);
+	freopen(OUTPUT, "w", stdout);
 	long int from, to, i;
 	scanf("%ld %ld", &from, &to);
-//	if (from % 2 == 0) {
-//		from++;
-//	}
-//	int l10;
-//	for (i = from; i <= to; i += 2) {
-////		printf("%d\n", i);
-//		if ( ispalindrome(i) && isprime(i)) {
-//			printf("%ld\n", i);
-//		}
-//	}
-//	printf("from%ld,to%ld\n", from, to);
-	for (i = log10(from)+1; i <=log10(to); i++) {
-		generator(i, from, to);
+
+	long int tmp;
+	int j = 0, k = 0;
+	tmp = to;
+	while (tmp > 0) {
+		tmp /= 10;
+		j++;
+	}
+	tmp = from;
+	while (tmp > 0) {
+		tmp /= 10;
+		k++;
+	}
+	for (i = k; i <= j; i++) {
+		gen(i, from, to);
 	}
 
 	exit(0);
