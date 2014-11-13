@@ -46,9 +46,8 @@ int ispalindrome(long int num) {
 	return 1;
 }
 
-
 int gen(int len, int mi, int mx) {
-	long int i, j, k;
+	long int j, k;
 	long int pal;
 	long int half_len = (len + 1) / 2;
 	long int to = pow(10, half_len);
@@ -83,6 +82,17 @@ int gen(int len, int mi, int mx) {
 	return 0;
 }
 
+int numlen(long int num) {
+	int j;
+	int long tmp;
+	tmp = num;
+	while (tmp > 0) {
+		tmp /= 10;
+		j++;
+	}
+	return j;
+}
+
 int main() {
 	freopen(INPUT, "r", stdin);
 	freopen(OUTPUT, "w", stdout);
@@ -91,17 +101,7 @@ int main() {
 
 	long int tmp;
 	int j = 0, k = 0;
-	tmp = to;
-	while (tmp > 0) {
-		tmp /= 10;
-		j++;
-	}
-	tmp = from;
-	while (tmp > 0) {
-		tmp /= 10;
-		k++;
-	}
-	for (i = k; i <= j; i++) {
+	for (i = numlen(from); i <= numlen(to); i++) {
 		gen(i, from, to);
 	}
 
