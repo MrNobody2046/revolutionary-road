@@ -1,5 +1,8 @@
 排序
 ======
+学习排序的一些笔记放在这里，自己写一些python代码，然后所有c的代码均来自算法精解法
+略有改动
+
 
 插入排序
 ----
@@ -181,6 +184,79 @@ def qsort(L):
     if len(L) <= 1: return L  
     return qsort([lt for lt in L[1:] if lt < L[0]]) + [L[0]] + \
             qsort([ge for ge in L[1:] if ge >= L[0]])  
+
+
+      
+```c
+static int partition(void *data, int esize, int i, int k,
+		int (*compare)(const void *key1, const void *key2)) {
+	char *a = data;
+	void *pval, *temp;
+	int r[3];
+	if ((pval = malloc(esize)) == NULL) {
+		return -1;
+	}
+	if ((temp = malloc(esize)) == NULL) {
+		return -1;
+	}
+	/* use the medain-of-thress method to find the partition value. */
+	r[0] = (rand() % (k - i + 1)) + i;
+	r[1] = (rand() % (k - i + 1)) + i;
+	r[2] = (rand() % (k - i + 1)) + i; // pick up  one element from 0-k
+	if (r[0] > r[1]) {
+		swap(&r[0], &r[1], esize);
+	}
+	if (r[2] < r[0]) {
+		swap(&r[2], &r[0], esize);
+	}
+	if (r[2] < r[1]) {
+		swap(&r[2], &r[1], esize);
+	}
+	memcpy(pval, &a[r[1] * esize], esize);
+
+	/* Create two partitions around the partition value. */
+	i--;
+	k++;
+	while (1) {
+		do {
+			k--;
+		} while (compare(&a[k * esize], pval) > 0);
+		do {
+			i++;
+		} while (compare(&a[i * esize], pval) < 0);
+
+		if (i >= k) {
+			break;
+		} else {
+			print_array(data, 7);
+			swap(&a[k * esize], &a[i * esize], esize);
+
+			print_array(data, 7);
+		}
+	}
+	free(pval);
+	free(temp);
+
+	/*    the position dividing the two partitions */
+	return k;
+}
+
+int qksort(void *data, int size, int esize, int i, int k,
+		int (*compare)(const void *key1, const void *key2)) {
+	int j;
+	while (i < k) {
+		if ((j = partition(data, esize, i, k, compare)) < 0) {
+			return -1;
+		}
+		if (qksort(data, size, esize, i, j, compare) < 0) {
+			return -1;
+		}
+		i = j + 1;
+
+	}
+	return 0;
+}
+```
 ```
 希尔排序
 ----
