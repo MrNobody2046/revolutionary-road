@@ -1,92 +1,109 @@
 /*
  ID:sphy1
  LANG: C
- TASK: milk3
+ TASK: pprime
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#define INPUT "pprime.in"
+#define OUTPUT "pprime.out"
 
-#define INPUT "milk3.in"
-#define OUTPUT "milk3.out"
-#define MAX 20
-
-int visited[100][100][100] = { 0 };
-int records[MAX + 1] = { 0 };
-int a, b, c;
-
-int search(int vol_a, int vol_b, int vol_c) {
-	if (vol_a==0) {
-		records[vol_c]++;
+int isprime(long int num) {
+	long int i;
+	if (num == 2) {
+		return 1;
 	}
-	if ((vol_a + vol_b + vol_c) > c || vol_a < 0 || vol_b < 0 || vol_c < 0) {
-		printf("ERROR\n");
-		printf("%d %d %d \n", vol_a, vol_b, vol_c);
-		return -1;
-	}
-	if (visited[vol_a][vol_b][vol_c] > 0) {
+	if (num % 2 == 0) {
 		return 0;
-	} else {
-		visited[vol_a][vol_b][vol_c]++;
-		int avalible_a = a - vol_a, avalible_b = b - vol_b, avalible_c = c
-				- vol_c;
-		// pour c->a
-		if (vol_c >= avalible_a)
-			search(a, vol_b, vol_c - avalible_a);
-		else
-			search(vol_a + vol_c, vol_b, 0);
-		// pour c->b
-		if (vol_c >= avalible_b)
-			search(vol_a, b, vol_c - avalible_b);
-		else
-			search(vol_a, vol_b + vol_c, 0);
-		// pour a->b
-		if (vol_a >= avalible_b)
-			search(vol_a - avalible_b, b, vol_c);
-		else
-			search(0, vol_a + vol_b, vol_c);
-		// pour a-> c
-		if (vol_a > avalible_c)
+	}
+	long int c = sqrt(num);
+	for (i = 3; i <= c; i += 2) {
+		if (num % i == 0) {
 			return 0;
-		//search(0, 0, vol_c);
-		else
-			search(0, vol_b, vol_c + vol_a);
-		// pour b->a
-		if (vol_b > avalible_a)
-			search(a, vol_b - a + vol_a, vol_c);
-		else
-			search(vol_a + vol_b, 0, vol_c);
-		// pour b->c
-		if (vol_b > avalible_c)
-			search(vol_a, 0, vol_c + vol_b);
-		else
-			return 0;
+		}
+	}
+	return 1;
+}
 
+int ispalindrome(long int num) {
+	int pos[10] = { 0 };
+	long int cnt = 0;
+	while (num > 0) {
+		pos[cnt] = num % 10;
+		num = num / 10;
+		cnt++;
+	}
+	int i;
+	for (i = 0; i < cnt / 2; i++) {
+		if (pos[i] != pos[cnt - i - 1]) {
+			return 0;
+		}
+
+	}
+	return 1;
+}
+
+int gen(int len, int mi, int mx) {
+	long int j, k;
+	long int pal;
+	long int half_len = (len + 1) / 2;
+	long int to = pow(10, half_len);
+	long int from = pow(10, half_len - 1) - 1;
+	char mirror[len + 1];
+	char temp[half_len];
+	for (j = from; j < to; j++) {
+		sprintf(temp, "%ld", j);
+		strcpy(mirror, temp);
+		if (half_len >= 1) {
+			if (len % 2 == 0) {
+				for (k = 0; k < half_len; k++) {
+					mirror[half_len + k] = temp[half_len - k - 1];
+				}
+			} else {
+				for (k = 0; k < half_len - 1; k++) {
+					mirror[half_len + k] = temp[half_len - k - 2];
+				}
+			}
+		}
+
+		pal = atoi(mirror);
+		if (pal > mx) {
+			return 0;
+		}
+		if (isprime(pal)) {
+			if (pal >= mi) {
+				printf("%ld\n", pal);
+			}
+		}
 	}
 	return 0;
+}
+
+int numlen(long int num) {
+	int j;
+	int long tmp;
+	tmp = num;
+	while (tmp > 0) {
+		tmp /= 10;
+		j++;
+	}
+	return j;
 }
 
 int main() {
 	freopen(INPUT, "r", stdin);
 	freopen(OUTPUT, "w", stdout);
-	scanf("%d %d %d", &a, &b, &c);
+	long int from, to, i;
+	scanf("%ld %ld", &from, &to);
 
-//	memset(records, 0, MAX);
-//	memset(visited, 0, sizeof(visited));
+	long int tmp;
+	int j = 0, k = 0;
+	for (i = numlen(from); i <= numlen(to); i++) {
+		gen(i, from, to);
+	}
 
-	search(0, 0, c);
-	int i, cnt = 0;
-	int ret[MAX];
-	for (i = 0; i < MAX+1; i++) {
-		if (records[i]) {
-			ret[cnt] = i;
-			cnt++;
-		}
-	}
-	for (i = 0; i < cnt - 1; i++) {
-		printf("%d ", ret[i]);
-	}
-	printf("%d\n", ret[cnt - 1]);
 	exit(0);
 }
