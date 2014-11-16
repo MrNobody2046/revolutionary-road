@@ -18,28 +18,35 @@ int sorted[1000];
 int main() {
     freopen(INPUT, "r", stdin);
     freopen(OUTPUT, "w", stdout);
-    int i, j, k, n, temp, ret = 0;
+    int i, j, n, temp, ret = 0;
     scanf("%d", &n);
     for (i = 0; i < n; i++) {
         scanf("%d", &temp);
         counts[temp - 1]++;
         input[i] = temp;
     }
-
+    j = 0;
     for (i = 0; i < 3; i++) {
-        j = 0;
-        for (k = i; k > 0; k--) {
-            j += counts[i];
+        while (counts[i] > 0) {
+            sorted[j] = i + 1;
+            j++;
+            counts[i]--;
         }
-        // j is start of idx
-//        printf("num %d start: %d end %d \n", i + 1, j, j + counts[i]);
-        for (k = j; k < j + counts[i]; k++) {
-//            printf("i:%d == %d , idx:%d \n", i + 1, input[k], k);
-            if (input[k] != i + 1) {
+    }
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++) {
+            if (input[i] != sorted[i] && input[j] != sorted[j]
+                    && input[i] == sorted[j] && input[j] == sorted[i]) {
+                input[i] = sorted[i];
+                input[j] = sorted[j];
                 ret++;
             }
         }
-    }
-    printf("%d\n", ret--);
+    int loop = 0;
+    for (i = 0; i < n; i++)
+        if (input[i] != sorted[i])
+            loop++;
+    ret += loop / 3 * 2;
+    printf("%d\n", ret);
     exit(0);
 }
