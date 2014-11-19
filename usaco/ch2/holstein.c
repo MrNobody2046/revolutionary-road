@@ -11,63 +11,111 @@
 #define INPUT "holstein.in"
 #define OUTPUT "holstein.out"
 
-int n, m, i, j;
+int vitamin_num, feed_num, i, j;
 int demand[25] = { 0 };
-int choice = ;
-typedef Feed {
-    int conten[25]= {0};
+int choice[25] = { 0 };
+int ret[25] = { 0 };
+int temp_ret[25] = { 0 };
+
+typedef struct Feed {
+	int conten[25];
 } Feed;
 
 Feed feeds[15];
+int found = 0;
 int idx = 0;
-int dfs(int length, int selected) {
-    if (length < selected) {
-        return;
-    }
-    if (selected <= 0) {
-    }
-    int i;
-    for (i = 0; i < length;i++)
-    {
-        idx ++;
-        choice[idx] = 0;
-        dfs(length, selected-1);
-        idx --;
-        idx ++;
-        choice[idx] = 1;
-        dfs(length, selected-1);
-        idx --;
-    }
-    return;
+void pp() {
+	for (i = 0; i <= feed_num; i++) {
+		printf("%d \t", choice[i]);
+	}
+	printf("\n");
 }
 
-int match(){
-    int _contain[25]= {0}
-    for(i=0;i<idx;i++){
-        for(j=0;j<m;j++){
-            if( choice[i]){
-                _contain[i] += feeds[i]
-            }
-        }
+void pp2() {
+	int _contain[25] = { 0 };
+	for (j = 0; j < vitamin_num; j++) {
+		for (i = 0; i < feed_num; i++) {
+			_contain[j] += choice[i] * feeds[i].conten[j];
+		}
+	}
+	for (i = 0; i < vitamin_num; i++) {
+		printf("%d \t", _contain[i]);
+	}
+	printf("\n");
+}
 
-    }
+void cpy_ret() {
+	for (i = 0; i < 25; i++) {
+		ret[i] = temp_ret[i];
+	}
 
+}
 
+void dfs() {
+
+	if (idx < 0) {
+		pp();
+
+		int sum = 0;
+		for (i = 0; i < feed_num; i++) {
+			if (choice[i]) {
+				sum += choice[i];
+				temp_ret[sum] = i + 1;
+			}
+		}
+		temp_ret[0] = sum;
+		if (temp_ret[0] < ret[0]) {
+			cpy_ret();
+		}
+
+		return;
+	}
+
+	choice[idx] = 0;
+	idx--;
+	dfs();
+	idx++;
+	choice[idx] = 1;
+	idx--;
+	dfs();
+	idx++;
+
+	return;
+}
+
+int match() {
+	int _contain[25] = { 0 };
+	for (j = 0; j < vitamin_num; j++) {
+		for (i = 0; i < feed_num; i++) {
+			_contain[j] += choice[i] * feeds[i].conten[j];
+		}
+		if (_contain[j] < demand[j]) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 int main() {
-    freopen(INPUT, "r", stdin);
-    freopen(OUTPUT, "w", stdout);
-    scanf("%d", &n);
+	freopen(INPUT, "r", stdin);
+//	freopen(OUTPUT, "w", stdout);
+	scanf("%d", &vitamin_num);
+	ret[0] = 25;
+	for (i = 0; i < vitamin_num; i++) {
+		scanf("%d", &demand[i]);
+	};
+	scanf("%d", &feed_num);
+	for (i = 0; i < feed_num; i++) {
+		for (j = 0; j < vitamin_num; j++) {
+			scanf("%d", &(feeds[i].conten[j]));
+		};
+	};
+	idx = feed_num;
+	dfs();
 
-    for (i = 0; i < n; i++) {
-        scanf("%d", &demand[i]);
-    };
-    scanf("%d", &m);
-    for (i = 0; i < m; i++) {
-        for (j = 0; j < n; j++) {
-            scanf("%d", &(feeds[i].conten[j]));
-        };
-    };
-    exit(0);
+	for (i = 0; i < ret[0]; i++) {
+		printf("%d ", ret[i]);
+	}
+	printf("%d\n", ret[i]);
+//	exit(0);
 }
