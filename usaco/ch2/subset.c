@@ -11,19 +11,29 @@
 #define INPUT "subset.in"
 #define OUTPUT "subset.out"
 
+#define MAX_NUMBER 40
+#define MAX_HALFSUM 28
+
+/*
+ * subset[i][j] 表示抽取序列前i个数，和为j的组合数量
+ * subset[1][1] = subset[1][0] = 1;
+ *
+ *
+*/
+
+
 int main() {
 	freopen(INPUT, "r", stdin);
 //	freopen(OUTPUT, "w", stdout);
 	int n, i, j, sum, ret;
 	scanf("%d", &n);
-	int subset[40][28] = { 0 };
+	int subset[MAX_NUMBER][MAX_HALFSUM] = { 0 };
 
-	sum = n*(n + 1) / 2;
+	sum = n * (n + 1) / 2;
 	printf("%d\n", sum);
-	if(sum % 2 != 0){
+	if (sum % 2 != 0) {
 		ret = 0;
-	}
-	else{
+	} else {
 		subset[1][1] = subset[1][0] = 1;
 		for (i = 2; i < n; i++) {
 			for (j = 0; j < sum; j++) {
@@ -35,8 +45,8 @@ int main() {
 			}
 		}
 	}
-	for(i=0;i<40;i++){
-		for(j=0;j<28;j++){
+	for (i = 0; i < MAX_NUMBER; i++) {
+		for (j = 0; j < MAX_HALFSUM; j++) {
 			printf("%d ", subset[i][j]);
 		}
 		printf("\n");
