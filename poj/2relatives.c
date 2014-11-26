@@ -91,7 +91,7 @@ void process_dataset(int size) {
 			child->children_num = 0;
         	j ++;
         }
-        printf("Append%s to %s %d children\n", (*child).name, (*father).name,(*father).children_num);
+//        printf("Append%s to %s %d children\n", (*child).name, (*father).name,(*father).children_num);
 //        (father->children)[father->children_num] = child;
         father->children_num ++;
 
