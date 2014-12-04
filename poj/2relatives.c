@@ -27,18 +27,21 @@ int find(person plist[], char *name, int psize) {
     int i;
     for (i = 0; i < psize; i++) {
         if (!strcmp(plist[i].name, name)) {
-            return 1;
+            printf("Found:%s,idx %d \n", name, i);
+            return i;
         }
     }
-    return 0;
+    return -1;
 }
 
 
 void add_age(person *p){
 	int i;
+	printf("children num :%d\n",p->children_num);
 	for(i=0;i<p->children_num;i++){
 		(p->children)[i]->age = p->age - (p->children)[i]->father_greater_age;
 		add_age((p->children)[i]);
+		printf("add age :%s %d\n", (p->children)[i]->name, (p->children)[i]->age);
 	}
 
 }
@@ -71,7 +74,7 @@ void process_dataset(int size) {
         }
         else{
         	father = &all[j];
-			strcpy(father->name, cname);
+			strcpy(father->name, fname);
 			father->age = -1;
 			father->father_greater_age = 0;
 			father->children_num = 0;
@@ -82,19 +85,23 @@ void process_dataset(int size) {
         }
         else{
         	child = &all[j];
-			strcpy(child->name, cname);
+			strcpy(all[j]->name, cname);
 			child->age = -1;
 			child->father_greater_age = father_greater_age;
+			child->children_num = 0;
         	j ++;
         }
-        (father->children)[father->children_num] = child;
+        printf("Append%s to %s %d children\n", (*child).name, (*father).name,(*father).children_num);
+//        (father->children)[father->children_num] = child;
+        father->children_num ++;
+
     }
     printf("person count :%d\n", j);
     add_age(ted);
-    person *current;
-    for (i = 0; i < size; i++) {
-    	current = &all[i];
-    	printf("r:%s %d\n", current->name, currnet->age);
+//    person *current;
+    for (i = 0; i < j; i++) {
+//    	current = &all[i];
+    	printf("P:%s %d\n", all[i].name, all[i].age);
 
     }
 }
