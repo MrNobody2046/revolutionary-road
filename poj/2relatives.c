@@ -14,7 +14,7 @@
 #define max_name_length 32
 
 typedef struct person {
-    char name[max_name_length];
+    char *name;
     int age;
     int father_greater_age;
     struct person *children[10];
@@ -85,13 +85,13 @@ void process_dataset(int size) {
         }
         else{
         	child = &all[j];
-			strcpy(all[j]->name, cname);
+			strcpy(child->name, cname);
 			child->age = -1;
 			child->father_greater_age = father_greater_age;
 			child->children_num = 0;
         	j ++;
         }
-//        printf("Append%s to %s %d children\n", (*child).name, (*father).name,(*father).children_num);
+        printf("Append%s to %s %d children\n", (*child).name, (*father).name,(*father).children_num);// segmentation fault
 //        (father->children)[father->children_num] = child;
         father->children_num ++;
 
