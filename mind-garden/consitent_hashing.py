@@ -40,7 +40,7 @@ class ConsistentHash(object):
         pass
 
 
-class BaseHashable(object):
+class Node(object):
     def __init__(self, name, virtual_node_num=0):
         self.name = name
         self.virutal_node_num = virtual_node_num
@@ -63,10 +63,6 @@ class BaseHashable(object):
 
     def process(self):
         self.count += 1
-
-
-class Node(BaseHashable):
-    pass
 
 
 if __name__ == "__main__":
